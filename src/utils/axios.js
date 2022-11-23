@@ -12,7 +12,7 @@ export const instance = axios.create({
 
 instance.interceptors.request.use(function (config) {
     // Perform check before request is sent
-
+    
     return config;
 }, function (error) {
     return Promise.reject(error)

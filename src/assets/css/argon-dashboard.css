@@ -20850,6 +20850,9 @@ fieldset:disabled .btn {
 
 .card .card-header {
   padding: 1.5rem;
+  display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .card .card-body {
@@ -22535,7 +22538,7 @@ hr.horizontal.gray-light {
   overflow-y: auto;
   padding: 0;
   box-shadow: none;
-  z-index: 9999;
+  z-index: 1040;
 }
 
 .navbar-vertical.navbar-expand-xs .navbar-collapse {

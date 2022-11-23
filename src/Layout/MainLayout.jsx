@@ -18,18 +18,18 @@ const MainLayout = () => {
     isLoggedin ?
     (
     <>
-        <div class="min-height-300 bg-primary position-absolute w-100"></div>
+        <div className="min-height-300 bg-primary position-absolute w-100"></div>
         <Sidebar/>
-        <main class="main-content position-relative border-radius-lg ">
+        <main className="main-content position-relative border-radius-lg ">
             <Navbar/>
-            <div class="container-fluid py-4" style={{ minHeight: '100vh' }}>
+            <div className="container-fluid py-4" style={{ minHeight: '100vh' }}>
                 <Outlet/>
                 <Mainfooter/>
             </div>
         </main>
     </>
     )
-    : <Navigate to={'/login'}/>
+    : <Navigate to={'/provider/login'}/>
   )
 }
 

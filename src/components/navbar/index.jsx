@@ -16,7 +16,7 @@ const Navbar = () => {
         if(ls.isLoggedin){
 
             localStorage.removeItem('auth')
-            navigate('/login');
+            navigate('/provider/login');
             
         }
     }
@@ -26,7 +26,7 @@ const Navbar = () => {
         <div className="container-fluid py-1 px-3">
             <nav aria-label="breadcrumb">
             <ol className="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-                <li className="breadcrumb-item text-sm"><a className="opacity-5 text-white" href="javascript:;">Pages</a></li>
+                <li className="breadcrumb-item text-sm"><a className="opacity-5 text-white" href="#">Pages</a></li>
                 <li className="breadcrumb-item text-sm text-white active" aria-current="page">Dashboard</li>
             </ol>
             <h6 className="font-weight-bolder text-white mb-0">Dashboard</h6>
@@ -52,7 +52,7 @@ const Navbar = () => {
                     </a>
                 </li>
                 <li className="nav-item d-xl-none ps-3 d-flex align-items-center">
-                <a href="javascript:;" className="nav-link text-white p-0" id="iconNavbarSidenav">
+                <a href="#" className="nav-link text-white p-0" id="iconNavbarSidenav">
                     <div className="sidenav-toggler-inner">
                     <i className="sidenav-toggler-line bg-white"></i>
                     <i className="sidenav-toggler-line bg-white"></i>
@@ -61,17 +61,17 @@ const Navbar = () => {
                 </a>
                 </li>
                 <li className="nav-item px-3 d-flex align-items-center">
-                <a href="javascript:;" className="nav-link text-white p-0">
+                <a href="#" className="nav-link text-white p-0">
                     <i className="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
                 </a>
                 </li>
                 <li className="nav-item dropdown pe-2 d-flex align-items-center">
-                    <a href="javascript:;" className="nav-link text-white p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a href="#" className="nav-link text-white p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                         <i className="fa fa-bell cursor-pointer"></i>
                     </a>
                     <ul className="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
                         <li className="mb-2">
-                        <a className="dropdown-item border-radius-md" href="javascript:;">
+                        <a className="dropdown-item border-radius-md" href="#">
                             <div className="d-flex py-1">
                             <div className="my-auto">
                                 <img src="./assets/img/team-2.jpg" className="avatar avatar-sm  me-3 "/>
@@ -89,7 +89,7 @@ const Navbar = () => {
                         </a>
                         </li>
                         <li className="mb-2">
-                        <a className="dropdown-item border-radius-md" href="javascript:;">
+                        <a className="dropdown-item border-radius-md" href="#">
                             <div className="d-flex py-1">
                             <div className="my-auto">
                                 <img src="./assets/img/small-logos/logo-spotify.svg" className="avatar avatar-sm bg-gradient-dark  me-3 "/>
@@ -107,7 +107,7 @@ const Navbar = () => {
                         </a>
                         </li>
                         <li>
-                        <a className="dropdown-item border-radius-md" href="javascript:;">
+                        <a className="dropdown-item border-radius-md" href="#">
                             <div className="d-flex py-1">
                             <div className="avatar avatar-sm bg-gradient-secondary  me-3  my-auto">
                                 <img src={Card} alt="" />

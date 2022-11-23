@@ -7,21 +7,52 @@ import AuthLayout from "../Layout/AuthLayout";
 import Dashbaord from "../pages/Dashbaord";
 import Login from "../pages/Login";
 import ErrorPage from "../error-page";
+import Profile from "../pages/Profile";
+import Register from "../pages/Register";
+import Schools from "../pages/Schools";
+import Subscriptions from "../pages/Subscriptions";
 
 // Authentication Routes 
 import AuthRoutes from "../utils/AuthRoutes";
-import Profile from "../pages/Profile";
+import Donations from "../pages/Donations";
+import Class from "../pages/Class";
+import Year from "../pages/Year";
+import Wallet from "../pages/Wallet";
+
+
 
 const routes = createBrowserRouter([
     {
-        path :"/login",
+        path :"/provider",
         element: < AuthLayout />,
         errorElement: <ErrorPage />,
         children: [
             {
-                path:'/login',
+                path:'/provider/login',
                 element:<Login/>
-            }
+            },
+        ],
+    },
+    {
+        path :"/school",
+        element: < AuthLayout />,
+        errorElement: <ErrorPage />,
+        children: [
+            {
+                path:'/school/login',
+                element:<Login/>
+            },
+        ],
+    },
+    {
+        path :"/alumini",
+        element: < AuthLayout />,
+        errorElement: <ErrorPage />,
+        children: [
+            {
+                path:'/alumini/login',
+                element:<Login/>
+            },
         ],
     },
     {
@@ -34,10 +65,43 @@ const routes = createBrowserRouter([
                 element:<Dashbaord/>
             },
             {
+                path:'/schools',
+                element:<Schools/>
+            },
+            {
+                path:'/subscription',
+                element:<Subscriptions/>
+            },
+            {
+                path:'/donations',
+                element:<Donations/>
+            },
+            {
+                path:'/wallet',
+                element:<Wallet/>
+            },
+            {
+                path:'/class',
+                element:<Class/>
+            },
+            {
+                path:'/year',
+                element:<Year/>
+            },
+            {
                 path:'/profile',
                 element:<Profile/>
             }
         ],
+    },
+    {
+        path:'/school',
+        children: [
+            {
+                path:'/school/register',
+                element:<Register/>
+            },
+        ]
     },
 ]);
 
