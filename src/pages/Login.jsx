@@ -9,22 +9,18 @@ import {
   PROVIDER_LOGIN_ENDPOINT, 
   SCHOOL_LOGIN_ENDPOINT 
 } from '../utils/constants';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const { isLoggedin } = useSelector((state)=> state.auth)
   
   const [ endpoint, setEndpoint] = useState('')
+  const [ user, setUser] = useState('')
+  const [ isLoading, setIsLoading] = useState(false)
 
 
   const dispatch = useDispatch()
   const navigate = useNavigate();
-  const location = useLocation();
-
-  // const params
-  const initialValues = {
-    email: 'babajide234@gmail.com', 
-    password: '348212' 
-  }
 
   useEffect(() => {
     if(isLoggedin){
@@ -35,11 +31,13 @@ const Login = () => {
   useEffect(() => {
     if(location.pathname == "/provider/login"){
       setEndpoint(PROVIDER_LOGIN_ENDPOINT);
+      setUser('babajide234@gmail.com');
       // console.log("pathname", location.pathname);
       console.log("pathname", endpoint);
     }
     if(location.pathname == "/school/login"){
       setEndpoint(SCHOOL_LOGIN_ENDPOINT );
+      setUser('sewel55217@xegge.com');
       // console.log("pathname", location.pathname);
       console.log("pathname", endpoint);  
     }
@@ -50,12 +48,25 @@ const Login = () => {
     }
   }, [location]);
 
-  const handleSubmit = (values) =>{
+   // const params
+   const initialValues = {
+    email: user ? user : '', 
+    password: '348212' 
+  }
 
-    const request = dispatch(login({values,endpoint}));
-    
-    request.then((res)=>{
-            console.log(res);
+  const handleSubmit =  (values) =>{
+    setIsLoading(true);
+    dispatch(login({values,endpoint}))
+    .then((res)=>{
+      setIsLoading(false);
+      let data = res.payload.data;
+      console.log(data);
+      if(data.status == 'success'){
+        toast.success(data.message);
+      }else{
+        toast.error(data.message);
+      }
+      console.log(res);
     })
   }
 
@@ -66,6 +77,7 @@ const Login = () => {
       <Formik
         initialValues= {initialValues}
         onSubmit={handleSubmit}
+        enableReinitialize={true}
       >
         {({
          values,
@@ -105,7 +117,10 @@ const Login = () => {
                 <label className="form-check-label" htmlFor="rememberMe">Remember me</label>
               </div>
               <div className="text-center">
-                <button type="submit" className="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0">Sign in</button>
+                <button type="submit" className="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0">
+                  {isLoading ? 'Loading...' : 'Sign in'}
+              
+                </button>
               </div>
         </form>
        )}

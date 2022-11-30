@@ -1,12 +1,104 @@
 import { Formik } from 'formik';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Modal from '../components/modal';
+import { useDispatch, useSelector } from 'react-redux'
+import { register, schools } from '../utils/thunkFunc';
+import { SCHOOLS_YEAR_ADD, SCHOOLS_YEAR_LIST, SCHOOLS_YEAR_UPDATE } from '../utils/constants';
 
 const Year = () => {
     const [yearlist, setYearList] = useState([]);
+    const { token } = useSelector((state)=> state.auth);
+    const dispatch = useDispatch();
+  
+    const [classlist, setClassList] = useState([]);
+    const [class_, setClass] = useState('');
+    const [class_id, setClassId] = useState('');
+    const [updateClass, setUpdateClass] = useState(false);
+    
+    useEffect(()=>{
+      getYear();
+    },[])
+
   const initialValues ={
     year: '',
     details:''
+  }
+
+  const getYear= ()=>{
+    const payload = {
+      endpoint: SCHOOLS_YEAR_LIST,
+      values:{
+          token:token,
+      }
+    }
+    dispatch(schools(payload))
+    .then((result) => {
+      if(result.payload.data.status == 'success'){
+        setYearList(result.payload.data.data);
+      }else{
+        setYearList([]);
+
+      }
+          console.log(result);
+      }).catch((err) => {
+          console.log(err);
+      });
+  }
+
+  
+  const addYear =(values)=>{
+    const payload = {
+      endpoint: SCHOOLS_YEAR_ADD,
+      values:{
+          token:token,
+          year:values.year,
+          details:values.details
+      }
+    }
+    dispatch(schools(payload))
+    .then((result) => {
+          console.log(result);
+      }).catch((err) => {
+          console.log(err);
+      });
+  }
+
+
+  const getSingleYear=(classId)=>{
+    const payload = {
+      endpoint: SCHOOLS_YEAR_LIST,
+      values:{
+          token:token,
+          class_id: classId,
+      }
+    }
+    dispatch(schools(payload))
+    .then((result) => {
+          var data = result.payload.data.data[0];
+          setUpdateClass(true)
+          setClass(data.class)
+          setClassId(classId);
+          console.log(result, updateClass, class_ ,data.class);
+      }).catch((err) => {
+          console.log(err);
+      });
+  }
+  
+  const editYear =(values)=>{
+    const payload = {
+      endpoint: SCHOOLS_YEAR_UPDATE,
+      values:{
+          token:token,
+          class_id: class_id,
+          class:values.class
+      }
+    }
+    dispatch(schools(payload))
+    .then((result) => {
+          console.log(result);
+      }).catch((err) => {
+          console.log(err);
+      });
   }
   const handleClassSubmit =(values)=>{
 
@@ -36,48 +128,27 @@ const Year = () => {
                       <table className="table align-items-center mb-0">
                         <thead>
                           <tr>
-                            <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">School Name</th>
-                            <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Address</th>
-                            <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-                            <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Registration Date</th>
+                            <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Year</th>
                             <th className="text-secondary opacity-7"></th>
                           </tr>
                         </thead>
                         <tbody>
                           {
-                            // schools_.map( (item) =>(
-                            //   <tr className="" >
-                            //     <td className="d-flex px-2 py-1">
-                            //       <div className="d-flex px-2 py-1">
-                            //         <div>
-                            //           <img src="../assets/img/team-2.jpg" className="avatar avatar-sm me-3" alt="user1"/>
-                            //         </div>
-                            //         <div className="d-flex flex-column justify-content-center">
-                            //           <h6 className="mb-0 text-sm">{item.name}</h6>
-                            //           <p className="text-xs text-secondary mb-0">{item.email}</p>
-                            //         </div>
-                            //       </div>
-                            //     </td>
-                            //     <td className="">
-                            //         <p className="text-xs font-weight-bold mb-0">{item.address}</p>
-                            //         <p className="text-xs text-secondary mb-0">{`${item.city},${item.state}`}</p>
-                            //     </td>
-                            //     <td className="align-middle text-center text-sm">
-                            //         <span className={`badge badge-sm ${item.active == 'Yes' ? 'bg-gradient-success':'bg-gradient-danger'}`}>{ item.active == 'Yes'? 'Active':'InActive'}</span>
-                            //     </td>
-                            //     <td className="align-middle text-center">
-                            //       <span className="text-secondary text-xs font-weight-bold">{item.created_on}</span>
-                            //     </td>
-                            //     <td className="align-middle">
-                            //       {/* <a href="javascript:;" className="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                            //         Edit
-                            //       </a> */}
-                            //       <button type="button" className="text-secondary font-weight-bold text-xs btn" data-bs-toggle="modal" data-bs-target="#details" onClick={getDetail(item.school_id)}>
-                            //         Details
-                            //       </button>
-                            //     </td>
-                            //   </tr>
-                            // ))
+                            yearlist.map( (item) =>(
+                              <tr className="" >
+                                <td className="align-middle px-4">
+                                  <span className="text-secondary text-xs font-weight-bold">{item.year}</span>
+                                </td>
+                                <td className="align-middle">
+                                  {/* <a href="javascript:;" className="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                    Edit
+                                  </a> */}
+                                  <button type="button" className="text-secondary font-weight-bold text-xs btn" data-bs-toggle="modal" data-bs-target="#details" onClick={getSingleYear(item.year_id)}>
+                                    Edit
+                                  </button>
+                                </td>
+                              </tr>
+                            ))
                           }
                         </tbody>
                       </table>
@@ -92,7 +163,8 @@ const Year = () => {
             <Modal id={'new'} label={'new'}>
             <Formik
               initialValues= {initialValues}
-              onSubmit={handleClassSubmit}
+              enableReinitialize={true}
+              onSubmit={addYear}
             >
               {({
               values,
@@ -114,8 +186,9 @@ const Year = () => {
                         placeholder="Year" 
                         aria-label="year" 
                         aria-describedby="year"
+                        value={values.year}
                         onChange={handleChange}
-                      />
+                        />
                     </div>
                     <label>Details</label>
                     <div className="input-group mb-3">
@@ -126,10 +199,11 @@ const Year = () => {
                         rows="" 
                         className="form-control" 
                         onChange={handleChange}
-                      ></textarea>
+                        value={values.details}
+                        ></textarea>
                     </div>
                     <div className="text-center">
-                      <button type="button" className="btn btn-sm bg-gradient-info w-50 mt-4 mb-0">Save</button>
+                      <button type="submit" className="btn btn-sm bg-gradient-info w-50 mt-4 mb-0">Save</button>
                     </div>
                 </form>
             )}

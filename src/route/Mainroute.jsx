@@ -18,6 +18,8 @@ import Donations from "../pages/Donations";
 import Class from "../pages/Class";
 import Year from "../pages/Year";
 import Wallet from "../pages/Wallet";
+import Alumini from "../pages/Alumini";
+import Session from "../pages/Session";
 
 
 
@@ -67,6 +69,14 @@ const routes = createBrowserRouter([
             {
                 path:'/schools',
                 element:<Schools/>
+            },
+            {
+                path:'/session',
+                element:<Session/>
+            },
+            {
+                path:'/alum',
+                element:<Alumini/>
             },
             {
                 path:'/subscription',

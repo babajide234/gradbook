@@ -1,15 +1,104 @@
 import { Formik } from 'formik';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Modal from '../components/modal';
+import { useDispatch, useSelector } from 'react-redux'
+import { register, schools } from '../utils/thunkFunc';
+import { SCHOOLS_CLASS_ADD, SCHOOLS_CLASS_LIST, SCHOOLS_CLASS_UPDATE} from '../utils/constants';
 
 const Class = () => {
-  const [classlist, setClassList] = useState([]);
-  const initialValues ={
-    class: ''
-  }
-  const handleClassSubmit =(values)=>{
+  const { token } = useSelector((state)=> state.auth);
+  const dispatch = useDispatch();
 
+  const [classlist, setClassList] = useState([]);
+  const [class_, setClass] = useState('');
+  const [class_id, setClassId] = useState('');
+  const [updateClass, setUpdateClass] = useState(false);
+  
+  useEffect(()=>{
+    getClases();
+  },[])
+
+  const initialValues = {
+    class: class_ ? class_ : ''
   }
+
+  const getClases = ()=>{
+    const payload = {
+      endpoint: SCHOOLS_CLASS_LIST,
+      values:{
+          token:token,
+      }
+    }
+    dispatch(schools(payload))
+    .then((result) => {
+      if(result.payload.data.status == 'success'){
+        setClassList(result.payload.data.data);
+      }else{
+        setClassList([]);
+
+      }
+          console.log(result);
+      }).catch((err) => {
+          console.log(err);
+      });
+  }
+
+
+  const addClass =(values)=>{
+    const payload = {
+      endpoint: SCHOOLS_CLASS_ADD,
+      values:{
+          token:token,
+          class:values.class
+      }
+    }
+    dispatch(schools(payload))
+    .then((result) => {
+          console.log(result);
+      }).catch((err) => {
+          console.log(err);
+      });
+  }
+
+
+  const getSingleClass =(classId)=>{
+    const payload = {
+      endpoint: SCHOOLS_CLASS_LIST,
+      values:{
+          token:token,
+          class_id: classId,
+      }
+    }
+    dispatch(schools(payload))
+    .then((result) => {
+          var data = result.payload.data.data[0];
+          setUpdateClass(true)
+          setClass(data.class)
+          setClassId(classId);
+          console.log(result, updateClass, class_ ,data.class);
+      }).catch((err) => {
+          console.log(err);
+      });
+  }
+  
+  const editClass =(values)=>{
+    const payload = {
+      endpoint: SCHOOLS_CLASS_UPDATE,
+      values:{
+          token:token,
+          class_id: class_id,
+          class:values.class
+      }
+    }
+    dispatch(schools(payload))
+    .then((result) => {
+          console.log(result);
+      }).catch((err) => {
+          console.log(err);
+      });
+  }
+
+
   return (
     <>
         <div className="row">
@@ -35,48 +124,24 @@ const Class = () => {
                       <table className="table align-items-center mb-0">
                         <thead>
                           <tr>
-                            <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">School Name</th>
-                            <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Address</th>
-                            <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-                            <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Registration Date</th>
+                            <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Class</th>
                             <th className="text-secondary opacity-7"></th>
                           </tr>
                         </thead>
                         <tbody>
                           {
-                            // schools_.map( (item) =>(
-                            //   <tr className="" >
-                            //     <td className="d-flex px-2 py-1">
-                            //       <div className="d-flex px-2 py-1">
-                            //         <div>
-                            //           <img src="../assets/img/team-2.jpg" className="avatar avatar-sm me-3" alt="user1"/>
-                            //         </div>
-                            //         <div className="d-flex flex-column justify-content-center">
-                            //           <h6 className="mb-0 text-sm">{item.name}</h6>
-                            //           <p className="text-xs text-secondary mb-0">{item.email}</p>
-                            //         </div>
-                            //       </div>
-                            //     </td>
-                            //     <td className="">
-                            //         <p className="text-xs font-weight-bold mb-0">{item.address}</p>
-                            //         <p className="text-xs text-secondary mb-0">{`${item.city},${item.state}`}</p>
-                            //     </td>
-                            //     <td className="align-middle text-center text-sm">
-                            //         <span className={`badge badge-sm ${item.active == 'Yes' ? 'bg-gradient-success':'bg-gradient-danger'}`}>{ item.active == 'Yes'? 'Active':'InActive'}</span>
-                            //     </td>
-                            //     <td className="align-middle text-center">
-                            //       <span className="text-secondary text-xs font-weight-bold">{item.created_on}</span>
-                            //     </td>
-                            //     <td className="align-middle">
-                            //       {/* <a href="javascript:;" className="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                            //         Edit
-                            //       </a> */}
-                            //       <button type="button" className="text-secondary font-weight-bold text-xs btn" data-bs-toggle="modal" data-bs-target="#details" onClick={getDetail(item.school_id)}>
-                            //         Details
-                            //       </button>
-                            //     </td>
-                            //   </tr>
-                            // ))
+                            classlist.map( (item) =>(
+                              <tr className="" >
+                                <td className="align-middle px-4">
+                                  <span className="text-secondary text-xs font-weight-bold">{item.class}</span>
+                                </td>
+                                <td className="align-middle">
+                                  <button type="button" className="text-secondary font-weight-bold text-xs btn" data-bs-toggle="modal" data-bs-target="#new" onClick={ ( ) => getSingleClass(item.class_id)}>
+                                    Edit
+                                  </button>
+                                </td>
+                              </tr>
+                            ))
                           }
                         </tbody>
                       </table>
@@ -89,31 +154,44 @@ const Class = () => {
         </div>
         <div className="row">
             <Modal id={'new'} label={'new'}>
-            <Formik
-              initialValues= {initialValues}
-              onSubmit={handleClassSubmit}
-            >
-              {({
-              values,
-              errors,
-              touched,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              isSubmitting,
-              /* and other goodies */
-            }) => (
-                <form role="form text-left" onSubmit={handleSubmit}>
-                    <label>School Class</label>
-                    <div className="input-group mb-3">
-                      <input type="text" name='class' className="form-control" placeholder="Class" aria-label="Name" aria-describedby="name"/>
-                    </div>
-                    <div className="text-center">
-                      <button type="button" className="btn btn-sm bg-gradient-info w-50 mt-4 mb-0">Save</button>
-                    </div>
-                </form>
-            )}
-            </Formik>
+              <Formik
+                initialValues= {initialValues}
+                enableReinitialize = {true}
+                onSubmit={updateClass ? editClass : addClass}
+              >
+                {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+                /* and other goodies */
+              }) => (
+                  <form role="form text-left" onSubmit={handleSubmit}>
+                      <label>School Class</label>
+                      <div className="input-group mb-3">
+                        <input 
+                          type="text" 
+                          name='class' 
+                          className="form-control" 
+                          placeholder="Class" 
+                          aria-label="class" 
+                          aria-describedby="class"
+                          value={ values.class }
+                          onChange={ handleChange }
+                        />
+                      </div>
+                      <div className="text-center">
+                        <button 
+                          type="submit" 
+                          className="btn btn-sm bg-gradient-info w-50 mt-4 mb-0"
+                        >Save</button>
+                      </div>
+                  </form>
+              )}
+              </Formik>
             
             </Modal>
         </div>

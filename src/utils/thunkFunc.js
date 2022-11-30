@@ -6,8 +6,8 @@ import {
         PROVIDER_UPDATE_DETAILS
      } from "./constants";
 
-const auth = JSON.parse(localStorage.getItem('auth'));
-const token = auth ? auth.token : ''
+// const auth = JSON.parse(localStorage.getItem('auth'));
+// const token = auth ? auth.token : ''
 
 export const login = createAsyncThunk('login',async (payload)=>{
     try {

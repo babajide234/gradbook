@@ -93,6 +93,18 @@ export const SchoolMenu = [
         children:[]
     },
     {
+        path:'/alum',
+        name:'Alumini',
+        icon:'ni ni-single-02 text-primary text-sm opacity-10',       
+        children:[]
+    },
+    {
+        path:'/session',
+        name:'Session',
+        icon:'ni ni-single-02 text-primary text-sm opacity-10',       
+        children:[]
+    },
+    {
         path:'/donations',
         name:'Donations',
         icon:'ni ni-single-02 text-primary text-sm opacity-10',       
@@ -122,6 +134,19 @@ export const PROVIDER_METRICS = '/provider/metrics';
 
 
 export const SCHOOLS_DETAILS= '/school/details';
+
+export const SCHOOLS_CLASS_LIST= '/school/class/list';
+export const SCHOOLS_CLASS_ADD= '/school/class/add';
+export const SCHOOLS_CLASS_UPDATE= '/school/class/update';
+
+export const SCHOOLS_YEAR_LIST= '/school/year/list';
+export const SCHOOLS_YEAR_ADD= '/school/year/add';
+export const SCHOOLS_YEAR_UPDATE= '/school/year/update';
+
+export const ALUMINI_REGISTER = '/alumni/register';
+export const ALUMINI_DETAILS = '/alumni/details';
+export const ALUMINI_DETAILS_UPDATE = '/alumni/update-details';
+
 export const SCHOOL_LOGIN_ENDPOINT = '/school/member/login';
 export const SCHOOL_REGISTER_ENDPOINT = '/school/register';
 

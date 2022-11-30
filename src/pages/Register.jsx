@@ -32,6 +32,7 @@ const Register = () => {
       )
     })
   });
+  
   const handleSubmit = (values)=>{
     // alert(JSON.stringify(values))
     dispatch(register({ values, endpoint: SCHOOL_REGISTER_ENDPOINT}))

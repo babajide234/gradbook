@@ -4,14 +4,18 @@ import Mainfooter from '../components/mainfooter'
 import Navbar from '../components/navbar'
 import Sidebar from '../components/sidebar'
 import { useDispatch, useSelector } from 'react-redux'
+import { ToastContainer } from 'react-toastify';
+
 const MainLayout = () => {
   const { isLoggedin } = useSelector((state)=> state.auth)
   
   // const dispatch = useDispatch();
 
-  // useEffect(() => {
-    
-  // }, [isLoggedin])
+  useEffect(() => {
+    if(!isLoggedin){
+      <Navigate to="/login" />
+    }
+  }, [isLoggedin])
 
   return (
 
@@ -27,6 +31,7 @@ const MainLayout = () => {
                 <Mainfooter/>
             </div>
         </main>
+        <ToastContainer autoClose={2000} />
     </>
     )
     : <Navigate to={'/provider/login'}/>

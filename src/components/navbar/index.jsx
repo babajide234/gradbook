@@ -1,24 +1,16 @@
 import React from 'react'
 import Card from '../../assets/img/card.svg';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from "../../store/reducers/AuthSlice";
 const Navbar = () => {
     
     const { isLoggedin } = useSelector((state) => state.auth);
     const navigate = useNavigate();
-
+    const dispatch = useDispatch();
     const handleLogout = (e)=>{
         e.preventDefault();
-
-        const ls = JSON.parse(localStorage.getItem('auth'));
-
-        if(ls.isLoggedin){
-
-            localStorage.removeItem('auth')
-            navigate('/provider/login');
-            
-        }
+        dispatch(logout());
     }
   return (
     <>
