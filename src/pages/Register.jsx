@@ -1,6 +1,6 @@
 import { Formik } from 'formik'
 import React, { useEffect, useState } from 'react'
-import { useLocation, Navigate, useNavigate } from 'react-router-dom'
+import { useLocation, Navigate, useNavigate, Link } from 'react-router-dom'
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { register } from '../utils/thunkFunc';
@@ -238,7 +238,7 @@ const Register = () => {
                         }
                       </button>
                     </div>
-                    <p className="text-sm mt-3 mb-0">Already have an account? <a href="#" className="text-dark font-weight-bolder">Sign in</a></p>
+                    <p className="text-sm mt-3 mb-0">Already have an account? <Link to="/school/login" className="text-dark font-weight-bolder">Sign in</Link></p>
                   </form>
                 ))}
 
