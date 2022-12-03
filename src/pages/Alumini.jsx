@@ -3,7 +3,11 @@ import React, { useState, useEffect } from 'react'
 import Modal from '../components/modal';
 import { useDispatch, useSelector } from 'react-redux'
 import { register, schools } from '../utils/thunkFunc';
-import { ALUMINI_REGISTER, ALUMINI_DETAILS } from '../utils/constants';
+import { 
+    ALUMINI_REGISTER, 
+    ALUMINI_DETAILS,
+    ALUMINI_DETAILS_UPDATE
+   } from '../utils/constants';
 import {
     useQuery,
     useMutation,
@@ -31,13 +35,14 @@ const Alumini = () => {
       getAlumini();
     },[])
         
-        const initialValues = {
-            alumni_ref: "", 
-            email: "", 
-            password: "",
-            lastname: "",
-            firstname: ""
-        }
+    const initialValues = {
+        alumni_ref: "", 
+        email: "", 
+        password: "",
+        lastname: "",
+        firstname: "",
+        active:false
+    }
         
     const getAlumini = ()=>{
           const payload = {
@@ -60,9 +65,6 @@ const Alumini = () => {
             });
     }
     
-    // const query = useQuery('alumini', getAlumini())
-  
-    // console.log(query);
     function handleCloseModal(){
       document.getElementById("new").classList.remove("show", "d-block", "modal-open");  
       document.getElementsByClassName("modal-backdrop")[0].classList.remove("modal-backdrop");
@@ -99,24 +101,18 @@ const Alumini = () => {
         });
     }
   
-    // const { isLoading, error, data } = useQuery('addAlumini',getAlumini);
-    
-    // console.log(data);
-    // console.log(isLoading);
-    // console.log(error);
-
-    const getSingleClass =(classId)=>{
+    const getSingleClass =(classId, email)=>{
+      setUpdateClass(true)
       const payload = {
-        endpoint: SCHOOLS_CLASS_LIST,
+        endpoint: ALUMINI_DETAILS,
         values:{
             token:token,
-            class_id: classId,
+            alumni_ref: classId,
         }
       }
       dispatch(schools(payload))
       .then((result) => {
             var data = result.payload.data.data[0];
-            setUpdateClass(true)
             setClass(data.class)
             setClassId(classId);
             console.log(result, updateClass, class_ ,data.class);
@@ -125,13 +121,14 @@ const Alumini = () => {
         });
     }
     
-    const editClass =(values)=>{
+    const editAlumini =(values)=>{
       const payload = {
-        endpoint: SCHOOLS_CLASS_UPDATE,
+        endpoint: ALUMINI_DETAILS_UPDATE,
         values:{
             token:token,
-            class_id: class_id,
-            class:values.class
+            alumni_ref: values.alumni_ref,
+            email:values.email,
+            active: values.active
         }
       }
       dispatch(schools(payload))
@@ -154,7 +151,7 @@ const Alumini = () => {
             <div className="card mb-4">
               <div className="card-header pb-0">
                 <h6>Alumini List table</h6>
-                <button className="btn btn-sm bg-gradient-info w-35" data-bs-toggle="modal" data-bs-target="#new" >Add New Alumini</button>
+                <button className="btn btn-sm bg-gradient-info w-35" data-bs-toggle="modal" data-bs-target="#new" onClick={ () => setUpdateClass(!updateClass) }>Add New Alumini</button>
               </div>
               <div className="card-body px-0 pt-0 pb-2">
                 <div className="table-responsive p-0">
@@ -191,7 +188,7 @@ const Alumini = () => {
                                   <span className="text-secondary text-xs font-weight-bold">{item.phone}</span>
                                 </td>
                                 <td className="align-middle">
-                                  <button type="button" className="text-secondary font-weight-bold text-xs btn" data-bs-toggle="modal" data-bs-target="#new" onClick={ ( ) => getSingleClass(item.alumni_ref)}>
+                                  <button type="button" className="text-secondary font-weight-bold text-xs btn" data-bs-toggle="modal" data-bs-target="#new" onClick={ ( ) => getSingleClass(item.alumni_ref, item.email)}>
                                     Edit
                                   </button>
                                 </td>
@@ -212,7 +209,7 @@ const Alumini = () => {
               <Formik
                 initialValues= {initialValues}
                 enableReinitialize = {true}
-                onSubmit={updateClass ? editClass : addAlumini}
+                onSubmit={updateClass ? editAlumini : addAlumini}
               >
                 {({
                 values,
@@ -251,50 +248,86 @@ const Alumini = () => {
                           onChange={ handleChange }
                         />
                       </div>
-                      <label>Password</label>
-                      <div className="input-group mb-3">
+                      <div class="form-check form-switch">
                         <input 
-                          type="password" 
-                          name='password' 
-                          className="form-control" 
-                          placeholder="Password" 
-                          aria-label="class" 
-                          aria-describedby="class"
-                          value={ values.password }
-                          onChange={ handleChange }
+                          class="form-check-input" 
+                          type="checkbox" 
+                          id="flexSwitchCheckDefault" 
+                          checked={ values.active }
+                          name='active'
+                          onChange= { handleChange } 
                         />
+                        {
+                          values.active ? (
+                            <label class="form-check-label" for="flexSwitchCheckDefault">
+                              <span class="badge bg-gradient-success">Active</span>
+                              
+                            </label>
+                          ) : (
+                            <label class="form-check-label" for="flexSwitchCheckDefault">
+                              <span class="badge bg-gradient-danger">Inactive</span>
+                              
+                            </label>
+                          )
+                        }
                       </div>
-                      <label>Lastname</label>
-                      <div className="input-group mb-3">
-                        <input 
-                          type="text" 
-                          name='lastname' 
-                          className="form-control" 
-                          placeholder="Lastname" 
-                          aria-label="class" 
-                          aria-describedby="class"
-                          value={ values.lastname }
-                          onChange={ handleChange }
-                        />
-                      </div>
-                      <label>Firstname</label>
-                      <div className="input-group mb-3">
-                        <input 
-                          type="text" 
-                          name='firstname' 
-                          className="form-control" 
-                          placeholder="Firstname" 
-                          aria-label="firstname" 
-                          aria-describedby="firstname"
-                          value={ values.firstname }
-                          onChange={ handleChange }
-                        />
-                      </div>
+                      {
+                        !updateClass ? (
+                          <>
+                            <label>Password</label>
+                            <div className="input-group mb-3">
+                              <input 
+                                type="password" 
+                                name='password' 
+                                className="form-control" 
+                                placeholder="Password" 
+                                aria-label="class" 
+                                aria-describedby="class"
+                                value={ values.password }
+                                onChange={ handleChange }
+                                />
+                            </div>
+                            <label>Lastname</label>
+                            <div className="input-group mb-3">
+                              <input 
+                                type="text" 
+                                name='lastname' 
+                                className="form-control" 
+                                placeholder="Lastname" 
+                                aria-label="class" 
+                                aria-describedby="class"
+                                value={ values.lastname }
+                                onChange={ handleChange }
+                              />
+                            </div>
+                            <label>Firstname</label>
+                            <div className="input-group mb-3">
+                              <input 
+                                type="text" 
+                                name='firstname' 
+                                className="form-control" 
+                                placeholder="Firstname" 
+                                aria-label="firstname" 
+                                aria-describedby="firstname"
+                                value={ values.firstname }
+                                onChange={ handleChange }
+                                />
+                            </div>
+                          </>
+                        ) : null
+                      }
                       <div className="text-center">
-                        <button 
-                          type="Ssubmit" 
-                          className="btn btn-sm bg-gradient-info w-50 mt-4 mb-0"
-                        >{ isLoading ? "Loading...":"Create New Alumini" }</button>
+                      {
+                        updateClass ? (
+
+                          <button type="submit" className="btn bg-gradient-info w-100 my-4 mb-2" disabled={isLoading}>{ isLoading ? "Loading...":"Update" }</button>
+                        
+                          ) : (
+                        
+                            <button type="submit" className="btn bg-gradient-info w-100 my-4 mb-2" disabled={isLoading}>{ isLoading ? "Loading...":"Add New" }</button>
+                        
+                          )
+                      }
                       </div>
                   </form>
               )}

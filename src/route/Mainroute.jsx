@@ -20,7 +20,9 @@ import Year from "../pages/Year";
 import Wallet from "../pages/Wallet";
 import Alumini from "../pages/Alumini";
 import Session from "../pages/Session";
-
+import Jobs from "../pages/Jobs";
+import Scholarship from "../pages/Scholarship";
+import Market from "../pages/Market"
 
 
 const routes = createBrowserRouter([
@@ -101,7 +103,19 @@ const routes = createBrowserRouter([
             {
                 path:'/profile',
                 element:<Profile/>
-            }
+            },
+            {
+                path:'/jobs',
+                element:<Jobs/>
+            },
+            {
+                path:'/scholarship',
+                element:<Scholarship/>
+            },
+            {
+                path:'/eMarket',
+                element:<Market/>
+            },
         ],
     },
     {

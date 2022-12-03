@@ -73,6 +73,7 @@ export const ProviderMenu = [
         children:[]
     }
 ];
+
 export const SchoolMenu = [
     {
         path:'/dashboard',
@@ -120,6 +121,51 @@ export const SchoolMenu = [
         path:'/profile',
         name:'Profile',
         icon:'ni ni-single-02 text-primary text-sm opacity-10',       
+        children:[]
+    }
+];
+
+export const AluminiMenu = [
+    {
+        path:'/dashboard',
+        name:'Dashboard',
+        icon:"ni ni-tv-2 text-primary text-sm opacity-10",
+        children:[]
+    },
+    {
+        path:'/wallet',
+        name:'Wallets',
+        icon:'ni ni-single-02 text-primary text-sm opacity-10',
+        children:[]
+    },
+    {
+        path:'/donations',
+        name:'Donations',
+        icon:'ni ni-single-02 text-primary text-sm opacity-10',
+        children:[]
+    },
+    {
+        path:'/jobs',
+        name:'Jobs',
+        icon:'ni ni-single-02 text-primary text-sm opacity-10',
+        children:[]
+    },
+    {
+        path:'/scholarships',
+        name:'Scholarships',
+        icon:'ni ni-single-02 text-primary text-sm opacity-10',
+        children:[]
+    },
+    {
+        path:'/emarket',
+        name:'Market',
+        icon:'ni ni-single-02 text-primary text-sm opacity-10',
+        children:[]
+    },
+    {
+        path:'/profile',
+        name:'Profile',
+        icon:'ni ni-single-02 text-primary text-sm opacity-10',
         children:[]
     }
 ];
