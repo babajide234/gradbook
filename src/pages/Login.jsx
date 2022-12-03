@@ -18,9 +18,10 @@ const Login = () => {
   const [ user, setUser] = useState('')
   const [ isLoading, setIsLoading] = useState(false)
 
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  
 
   useEffect(() => {
     if(isLoggedin){

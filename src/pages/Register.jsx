@@ -1,14 +1,16 @@
 import { Formik } from 'formik'
-import React, { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useLocation, Navigate, useNavigate } from 'react-router-dom'
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { register } from '../utils/thunkFunc';
 import { SCHOOL_REGISTER_ENDPOINT } from '../utils/constants';
+import { toast, ToastContainer } from 'react-toastify';
 const Register = () => {
   const location = useLocation();
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
+  const [ isLoading, setIsLoading] = useState(false)
 
   useEffect(()=>{
     console.log(location.pathname);
@@ -19,76 +21,46 @@ const Register = () => {
     address : "", //School full address
     email : "", // Email of person registering
     password:"",
-    confirmpassword:""
+    confirmpassword:"",
+    terms: false
   }
 
   const Schema = Yup.object().shape({
-    password: Yup.string().required("This field is required"),
-    confirmpassword: Yup.string().when("password", {
-      is: val => (val && val.length > 0 ? true : false),
-      then: Yup.string().oneOf(
-        [Yup.ref("password")],
-        "Both password need to be the same"
-      )
-    })
+    name: Yup.string().min(5," Name too Short").max(50,"Name too Long").required("Name is Required"),
+    address: Yup.string().min(5," Address too Short").max(50,"Address too Long").required("Address is Required"),
+    email: Yup.string().email('Invalid email').required('Email is Required'),
+    password: Yup.string().min(4, "Password too short").max(50, "Password Too Long").required("This field is required"),
+    confirmpassword: Yup.string().oneOf([Yup.ref("password")],"Both password need to be the same").required("This field is required"),
+    terms: Yup.boolean().oneOf([true],"Please accept terms and conditions")
   });
   
-  const handleSubmit = (values)=>{
+  const handleSubmit = (values, action)=>{
+    setIsLoading(true);
     // alert(JSON.stringify(values))
     dispatch(register({ values, endpoint: SCHOOL_REGISTER_ENDPOINT}))
     .then((result) => {
-      console.log(result); 
+      var data = result.payload.data;
+      if (data.status === "success") {
+        setIsLoading(false); 
+        action(false)
+        toast.success(data.message);
+        setTimeout(()=>{
+          navigate('/school/login', )
+        },2500)
+        
+      } else {
+        toast.error(data.message);
+        action(false)
+      }
+      
     }).catch((err) => {
       console.log(err); 
     });
-
   }
+  
   return (
     <>
-      <nav className="navbar navbar-expand-lg position-absolute top-0 z-index-3 w-100 shadow-none my-3 navbar-transparent mt-4">
-        <div className="container">
-          <a className="navbar-brand font-weight-bolder ms-lg-0 ms-3 text-white" href="../pages/dashboard.html">
-            Argon Dashboard 2
-          </a>
-          <button className="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon mt-2">
-              <span className="navbar-toggler-bar bar1"></span>
-              <span className="navbar-toggler-bar bar2"></span>
-              <span className="navbar-toggler-bar bar3"></span>
-            </span>
-          </button>
-          <div className="collapse navbar-collapse" id="navigation">
-            <ul className="navbar-nav mx-auto">
-              <li className="nav-item">
-                <a className="nav-link d-flex align-items-center me-2 active" aria-current="page" href="../pages/dashboard.html">
-                  <i className="fa fa-chart-pie opacity-6  me-1"></i>
-                  Dashboard
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link me-2" href="../pages/profile.html">
-                  <i className="fa fa-user opacity-6  me-1"></i>
-                  Profile
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link me-2" href="../pages/sign-up.html">
-                  <i className="fas fa-user-circle opacity-6  me-1"></i>
-                  Sign Up
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link me-2" href="../pages/sign-in.html">
-                  <i className="fas fa-key opacity-6  me-1"></i>
-                  Sign In
-                </a>
-              </li>
-            </ul>
-          
-          </div>
-        </div>
-      </nav>
-  {/* <!-- End Navbar --> */}
+      <ToastContainer autoClose={2000} />
   <main className="main-content  mt-0">
     <div className="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg" style={{backgroundImage: "url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signup-cover.jpg')", backgroundPosition: 'top'}}>
       <span className="mask bg-gradient-dark opacity-6"></span>
@@ -156,7 +128,9 @@ const Register = () => {
               <Formik
                 initialValues={initialValues}
                 validationSchema={Schema}
-                onSubmit={handleSubmit}
+                onSubmit={(values, { setSubmitting }) => {
+                  handleSubmit(values, setSubmitting);
+                }}
               >
                 {(({
                   values,
@@ -166,31 +140,39 @@ const Register = () => {
                   handleBlur,
                   handleSubmit,
                   isSubmitting,
-                })=>(
+                }) => (
 
                   <form role="form" onSubmit={handleSubmit}>
                     <div className="mb-3">
                       <input 
                         type="text" 
-                        className="form-control" 
+                        className={`form-control ${errors.name && touched.name ? 'is-invalid': null}`} 
                         placeholder="Name" 
                         aria-label="Name" 
                         name='name'
                         value={values.name}
                         onChange={handleChange}
+                        onBlur={handleBlur}
                       />
+                      <span className="error" style={{ color: "red" }}>
+                        {errors.name && touched.name && errors.name }
+                      </span>
 
                     </div>
                     <div className="mb-3">
                       <input 
                         type="email" 
-                        className="form-control" 
+                        className={`form-control ${errors.email && touched.email ? 'is-invalid': null}`} 
                         placeholder="Email" 
                         aria-label="Email" 
                         name='email'
                         value={values.email}
                         onChange={handleChange}
+                        onBlur={handleBlur}
                       />
+                      <span className="error" style={{ color: "red" }}>
+                        {errors.email && touched.email ? errors.email : null}
+                      </span>
                     </div>
                     <div className="mb-3">
                       <textarea 
@@ -202,45 +184,59 @@ const Register = () => {
                         className="form-control" 
                         value={ values.address }
                         onChange={handleChange}
+                        onBlur={handleBlur}
 
                       ></textarea>
                     </div>
                     <div className="mb-3">
                       <input 
                         type="password" 
-                        className="form-control" 
+                        className={`form-control ${errors.password && touched.password ? 'is-invalid': null}`} 
                         placeholder="Password" 
                         aria-label="Password" 
                         name='password'
                         value={ values.password }
                         onChange={handleChange}
+                        onBlur={handleBlur}
                       />
-                      <span class="error" style={{ color: "red" }}>
-                        {errors.password}
+                      <span className="error" style={{ color: "red" }}>
+                        {errors.password && touched.password ? errors.password : null}
                       </span>
                     </div>
                     <div className="mb-3">
                       <input 
                         type="password" 
-                        className="form-control" 
+                        className={`form-control ${errors.confirmpassword && touched.confirmpassword ? 'is-invalid': null}`} 
                         placeholder="Confirm Password" 
                         aria-label="Confirm Password" 
                         name='confirmpassword'
                         value={ values.confirmpassword}
                         onChange={handleChange}
+                        onBlur={handleBlur}
                       />
-                      <span class="error" style={{ color: "red" }}>
-                        {errors.changepassword}
+                      <span className="error" style={{ color: "red" }}>
+                        {errors.confirmpassword && touched.confirmpassword &&  errors.confirmpassword}
                       </span>
                     </div>
                     <div className="form-check form-check-info text-start">
-                      <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
+                      <input 
+                        className="form-check-input" 
+                        type="checkbox" 
+                        name='terms'
+                        id="flexCheckDefault" 
+                        checked = { values.terms}
+                        onChange={ handleChange }
+                      />
                       <label className="form-check-label" htmlFor="flexCheckDefault">
                         I agree the <a href="#" className="text-dark font-weight-bolder">Terms and Conditions</a>
                       </label>
                     </div>
                     <div className="text-center">
-                      <button type="Submit" className="btn bg-gradient-dark w-100 my-4 mb-2">Sign up</button>
+                      <button type="Submit" className={`btn w-100 my-4 mb-2 ${ values.terms ? 'bg-gradient-dark':'bg-gradient-light'}`} disabled={!values.terms}>
+                        {
+                          isSubmitting ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> : "Sign up"
+                        }
+                      </button>
                     </div>
                     <p className="text-sm mt-3 mb-0">Already have an account? <a href="#" className="text-dark font-weight-bolder">Sign in</a></p>
                   </form>

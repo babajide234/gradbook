@@ -1,9 +1,10 @@
 import React from 'react'
 import './AuthStyle.css';
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify';
 
 const AuthLayout = () => {
+  const location = useLocation();
   const style={
     height:'100vh'
   }
@@ -24,10 +25,16 @@ const AuthLayout = () => {
                       <Outlet/>
                     </div>
                     <div className="card-footer text-center pt-0 px-lg-2 px-1">
-                      <p className="mb-4 text-sm mx-auto">
-                        Don't have an account?
-                        <a href="#" className="text-primary text-gradient font-weight-bold">Sign up</a>
-                      </p>
+                      {
+                        location.pathname === '/school/login' && (
+                          <p className="mb-4 text-sm mx-auto">
+                            Don't have an account?
+                            <a href="/register" className="text-primary text-gradient font-weight-bold" onClick={(e) => e.preventDefault()}>
+                              Sign up
+                            </a>
+                          </p>
+                        ) 
+                      }
                     </div>
                   </div>
                 </div>
