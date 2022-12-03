@@ -1,7 +1,13 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Formik } from 'formik';
+import {  schools } from '../utils/thunkFunc';
 
 
 const Session = () => {
+    const { token } = useSelector((state)=> state.auth);
+    const dispatch = useDispatch();
+
     
   
   return (
