@@ -1,8 +1,31 @@
-import React, { useState } from 'react'
-
+import React, { useState, useEffect } from 'react'
+import { DONATION_DETAILS } from '../utils/constants';
+import { schools } from '../utils/thunkFunc';
+import { useDispatch, useSelector } from 'react-redux';
 const Donations = () => {
-    const [transactions, setTransactions] = useState([]);
+    const [transactions, setTransactions] = useState(null);
+    const { token } = useSelector((state)=> state.auth);
 
+    const dispatch = useDispatch();
+    useEffect(() => {
+        getTransactions()
+    }, [])
+
+    const getTransactions =()=>{
+        const payload = {
+            endpoint: DONATION_DETAILS,
+            values:{
+                token:token,
+            }
+        }
+        dispatch(schools(payload))
+        .then((result) => {
+            setTransactions(result.payload.data.data);
+        })
+        .catch((err)=>{
+          console.log(err);
+        })
+    }
   return (
     <>
         <div className="row">
@@ -15,7 +38,7 @@ const Donations = () => {
               <div className="card-body px-0 pt-0 pb-2">
                 <div className="table-responsive p-0">
                   {
-                    transactions.length <= 0 ? (
+                    transactions == null ? (
                       <div className=" w-100 h-25flex justify-content-center align-items-center">
                         <p className=" text-secondary text-center px-3">No Content</p>
                       </div>

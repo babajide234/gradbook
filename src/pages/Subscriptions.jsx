@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { SUBSCRIPTION_DETAILS_ENDPOINT } from '../utils/constants';
+import { 
+  SUBSCRIPTION_DETAILS_ENDPOINT,
+  SUBSCRIPTION_INITIATE_ENDPOINT 
+} from '../utils/constants';
 import { subscription } from '../utils/thunkFunc';
 import Modal from '../components/modal';
 
 const Subscriptions = () => {
-  const { token } = useSelector((state)=> state.auth);
+  const { token, user } = useSelector((state)=> state.auth);
   const dispatch = useDispatch();
   
   const [subscriptions, setSubscriptions] = useState([]);
+  const [id, setId] = useState('');
 
   useEffect(()=>{
     getSubscriptions()
   },[])
 
   const getSubscriptions = ()=>{
-
     const payload = {
       endpoint: SUBSCRIPTION_DETAILS_ENDPOINT,
       values:{
@@ -30,16 +33,84 @@ const Subscriptions = () => {
       console.log(err);
   });
   }
+
   const getDetail = (id)=>{
     console.log(id)
   }
+  const subscribe = ()=>{
+
+    const payload = {
+      endpoint: SUBSCRIPTION_INITIATE_ENDPOINT,
+      values:{
+          token:token,
+          id: id
+      }
+    }
+    dispatch(subscription(payload))
+    .then((result) => {
+        setSubscriptions(result.payload.data.data);
+        console.log(result);
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+  }
   return (
     <>
-        <div className="row">
-          <div className="col-12">
+    {
+    user.role == 'Admin' ? (
+      <>
+        <div className="row mb-4">
+          <div className="col-4">
+            <h2>Subscriptions</h2>
+            {
+              subscriptions.map( (item,index) =>(
+                <div class="card" key={index}>
+                  <div class="card-header text-center pt-4 pb-3">
+                    <span class="badge rounded-pill bg-light text-dark">{item.name}</span>
+                    <h1 class="font-weight-bold mt-2">
+                      <small>₦ </small>{item.amount}
+                    </h1>
+                  </div>
+                  <div class="card-body text-lg-left text-center pt-0">
+                    <div class="d-flex justify-content-lg-start justify-content-center p-2">
+                      <div class="icon icon-shape icon-xs rounded-circle bg-gradient-success shadow text-center">
+                        <i class="fas fa-check opacity-10" aria-hidden="true"></i>
+                      </div>
+                      <div>
+                        <span class="ps-3">{item.description}</span>
+                      </div>
+                    </div>
 
+                    <a href="javascript:;" class="btn btn-icon bg-gradient-primary d-lg-block mt-3 mb-0" onClick={() => subscribe(index)}>
+                      Subscribe
+                      <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
+                    </a>
+                  </div>
+                </div>
+              ))
+            }
           </div>
         </div>
+        <div className="row">
+          <Modal id={'details'} label={'details'}>
+              
+              <div className=' mb-4'>
+                <h3 className="mb-0 text-sm">School Name</h3>
+                <p className="text-xs text-secondary mb-0">dtails</p>
+              </div>
+              <div className=' mb-4'>
+                <h3 className="mb-0 text-sm">Email</h3>
+                <p className="text-xs text-secondary mb-0">dtails</p>
+              </div>
+              <div className=' mb-4'>
+                <h3 className="mb-0 text-sm">Phone Number</h3>
+                <p className="text-xs text-secondary mb-0">dtails</p>
+              </div>
+          </Modal>
+        </div>
+      </>
+    ) : (
         <div className="row">
           <div className="col-12">
             <div className="card mb-4">
@@ -99,23 +170,8 @@ const Subscriptions = () => {
             </div>
           </div>
         </div>
-        <div className="row">
-        <Modal id={'details'} label={'details'}>
-            
-            <div className=' mb-4'>
-              <h3 className="mb-0 text-sm">School Name</h3>
-              <p className="text-xs text-secondary mb-0">dtails</p>
-            </div>
-            <div className=' mb-4'>
-              <h3 className="mb-0 text-sm">Email</h3>
-              <p className="text-xs text-secondary mb-0">dtails</p>
-            </div>
-            <div className=' mb-4'>
-              <h3 className="mb-0 text-sm">Phone Number</h3>
-              <p className="text-xs text-secondary mb-0">dtails</p>
-            </div>
-        </Modal>
-        </div>
+    )
+  }
     </>
   )
 }

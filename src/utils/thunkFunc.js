@@ -1,8 +1,6 @@
 import {  createAsyncThunk } from "@reduxjs/toolkit";
 import { instance } from "./axios";
 import { 
-        PROVIDER_DETAILS, 
-        PROVIDER_LOGIN_ENDPOINT,
         PROVIDER_UPDATE_DETAILS
      } from "./constants";
 
@@ -52,12 +50,13 @@ export const metrics = createAsyncThunk('metrics',async (payload)=>{
 
 export const details = createAsyncThunk('details', async (payload) => {
     try {
-        const request = await instance.post(PROVIDER_DETAILS, payload);
+        const request = await instance.post( payload.endpoint, payload.values);
         return request;
     } catch (error) {
         return console.log(error);
     }
 })
+
 export const updateDetails = createAsyncThunk('updateDetails', async (payload) => {
     try {
         const request = await instance.post(PROVIDER_UPDATE_DETAILS, payload);

@@ -1,7 +1,7 @@
 import React from 'react'
 import Logo from '../../assets/img/logo-ct-dark.png'
 import { Link } from 'react-router-dom'
-import { ProviderMenu, SchoolMenu } from '../../utils/constants'
+import { ProviderMenu, SchoolMenu, AluminiMenu } from '../../utils/constants'
 import { useSelector } from 'react-redux'
 const Sidebar = () => {
     
@@ -37,9 +37,23 @@ const Sidebar = () => {
                         )
                     }
                     {
-                        user.school_id && (
+                        user.school_id && !user.alumni_ref && (
                             SchoolMenu.map((item)=>(
 
+                                <li className="nav-item" key={item.name}>
+                                    <Link className="nav-link"  to={item.path}>
+                                        <div className="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className={item.icon}></i>
+                                        </div>
+                                        <span className="nav-link-text ms-1">{ item.name}</span>
+                                    </Link>
+                                </li>
+                            ))
+                        )
+                    }
+                    {
+                        user.school_id && user.alumni_ref && (
+                            AluminiMenu.map((item)=>(
                                 <li className="nav-item" key={item.name}>
                                     <Link className="nav-link"  to={item.path}>
                                         <div className="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">

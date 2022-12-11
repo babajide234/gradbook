@@ -1,15 +1,15 @@
 import React from 'react'
 import ReactModal from 'react-modal';
 
-const Modal = ({children ,id,label, modalCLose}) => {
+const Modal = ({children ,id,label,title }) => {
   return (
     <>
         <div className="modal fade" id={id} tabIndex="-1" role="dialog" aria-labelledby={label} aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered" role="document">
             <div className="modal-content">
             <div className="modal-header">
-                <h5 className="modal-title" id={id}>Modal title</h5>
-                <button type="button" ref={modalCLose} className="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                <h5 className="modal-title" id={id}>{title ? title : 'Modal title'}</h5>
+                <button type="button"  className="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>

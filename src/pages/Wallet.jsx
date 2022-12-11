@@ -1,7 +1,40 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { schools } from '../utils/thunkFunc'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { WALLET_DETAILS } from '../utils/constants'
 
 const Wallet = () => {
+  const { isLoggedin, token } = useSelector((state) => state.auth)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const dispatch = useDispatch()
+
+
   const [transactions, setTransactions] = useState([]);
+  const [balance, setBalance] = useState(0);
+
+  useEffect(() => {
+    getWallet()
+  }, [])
+
+  const getWallet = ()=>{
+    const payload=
+      {
+        endpoint: WALLET_DETAILS,
+        values:{
+            token:token,
+        }
+      }
+    dispatch(schools(payload))
+    .then((res)=>{
+      console.log(res)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  }
 
   return (
     <>
@@ -9,11 +42,11 @@ const Wallet = () => {
             <div className="col-3">
                 <div className="card mb-4">
                     <div className="card-header mx-4 p-3 text-center"></div>
-                    <div class="card-body pt-0 p-3 text-center">
-                      <h6 class="text-center mb-0">Balance</h6>
-                      <span class="text-xs">Balance Of Wallet</span>
-                      <hr class="horizontal dark my-3"/>
-                      <h5 class="mb-0">+$2000</h5>
+                    <div className="card-body pt-0 p-3 text-center">
+                      <h6 className="text-center mb-0">Balance</h6>
+                      <span className="text-xs">Balance Of Wallet</span>
+                      <hr className="horizontal dark my-3"/>
+                      <h5 className="mb-0">+$2000</h5>
                     </div>
                 </div>
             </div>

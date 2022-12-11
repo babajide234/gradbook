@@ -151,7 +151,7 @@ const Alumini = () => {
             <div className="card mb-4">
               <div className="card-header pb-0">
                 <h6>Alumini List table</h6>
-                <button className="btn btn-sm bg-gradient-info w-35" data-bs-toggle="modal" data-bs-target="#new" onClick={ () => setUpdateClass(!updateClass) }>Add New Alumini</button>
+                <button className="btn btn-sm bg-gradient-info w-35" data-bs-toggle="modal" data-bs-target="#new" onClick={ () => setUpdateClass(false) }>Add New Alumini</button>
               </div>
               <div className="card-body px-0 pt-0 pb-2">
                 <div className="table-responsive p-0">
@@ -272,7 +272,7 @@ const Alumini = () => {
                         }
                       </div>
                       {
-                        !updateClass ? (
+                        updateClass ? null : (
                           <>
                             <label>Password</label>
                             <div className="input-group mb-3">
@@ -314,25 +314,20 @@ const Alumini = () => {
                                 />
                             </div>
                           </>
-                        ) : null
+                        )
                       }
                       <div className="text-center">
                       {
                         updateClass ? (
-
-                          <button type="submit" className="btn bg-gradient-info w-100 my-4 mb-2" disabled={isLoading}>{ isLoading ? "Loading...":"Update" }</button>
-                        
+                            <button type="submit" className="btn bg-gradient-info w-100 my-4 mb-2" disabled={isLoading}>{ isLoading ? "Loading...":"Update" }</button>
                           ) : (
-                        
                             <button type="submit" className="btn bg-gradient-info w-100 my-4 mb-2" disabled={isLoading}>{ isLoading ? "Loading...":"Add New" }</button>
-                        
                           )
                       }
                       </div>
                   </form>
               )}
               </Formik>
-            
             </Modal>
         </div>
     </>

@@ -21,7 +21,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  
+
 
   useEffect(() => {
     if(isLoggedin){
@@ -44,6 +44,7 @@ const Login = () => {
     }
     if(location.pathname == "/alumini/login"){
       setEndpoint( ALUMNI_LOGIN_ENDPOINT );
+      setUser('bapebex213s@diratu.com')
       // console.log("pathname", location.pathname); 
       console.log("pathname", endpoint);
     }
@@ -55,7 +56,7 @@ const Login = () => {
     password: '348212' 
   }
 
-  const handleSubmit =  (values) =>{
+  const handleSubmit =  (values, action) =>{
     setIsLoading(true);
     dispatch(login({values,endpoint}))
     .then((res)=>{
@@ -63,8 +64,10 @@ const Login = () => {
       let data = res.payload.data;
       console.log(data);
       if(data.status == 'success'){
+        action(false);
         toast.success(data.message);
       }else{
+        action(false);
         toast.error(data.message);
       }
       console.log(res);
@@ -77,7 +80,9 @@ const Login = () => {
 
       <Formik
         initialValues= {initialValues}
-        onSubmit={handleSubmit}
+        onSubmit={(values, { setSubmitting }) => {
+          handleSubmit(values, setSubmitting);
+        }}
         enableReinitialize={true}
       >
         {({
@@ -119,8 +124,9 @@ const Login = () => {
               </div>
               <div className="text-center">
                 <button type="submit" className="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0">
-                  {isLoading ? 'Loading...' : 'Sign in'}
-              
+                  {
+                    isSubmitting ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> : "Sign in"
+                  }
                 </button>
               </div>
         </form>
