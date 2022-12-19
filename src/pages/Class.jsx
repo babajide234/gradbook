@@ -4,6 +4,7 @@ import Modal from '../components/modal';
 import { useDispatch, useSelector } from 'react-redux'
 import { register, schools } from '../utils/thunkFunc';
 import { SCHOOLS_CLASS_ADD, SCHOOLS_CLASS_LIST, SCHOOLS_CLASS_UPDATE} from '../utils/constants';
+import { toast } from 'react-toastify';
 
 const Class = () => {
   const { token } = useSelector((state)=> state.auth);
@@ -31,11 +32,13 @@ const Class = () => {
     }
     dispatch(schools(payload))
     .then((result) => {
-      if(result.payload.data.status == 'success'){
+      const data = result.payload.data;
+      if(data.status == 'success'){
+        toast.success(data.message);
         setClassList(result.payload.data.data);
       }else{
         setClassList([]);
-
+        toast.error(data.message);
       }
           console.log(result);
       }).catch((err) => {
@@ -44,7 +47,7 @@ const Class = () => {
   }
 
 
-  const addClass =(values)=>{
+  const addClass =(values, { setSubmitting })=>{
     const payload = {
       endpoint: SCHOOLS_CLASS_ADD,
       values:{
@@ -54,7 +57,16 @@ const Class = () => {
     }
     dispatch(schools(payload))
     .then((result) => {
-          console.log(result);
+        const data = result.payload.data;
+        if(data.status == 'success'){
+          toast.success(data.message);
+          setSubmitting(false);
+          getClases();
+        }else{
+          toast.error(data.message);
+          setSubmitting(false);
+        }
+        
       }).catch((err) => {
           console.log(err);
       });
@@ -71,17 +83,21 @@ const Class = () => {
     }
     dispatch(schools(payload))
     .then((result) => {
-          var data = result.payload.data.data[0];
-          setUpdateClass(true)
-          setClass(data.class)
-          setClassId(classId);
-          console.log(result, updateClass, class_ ,data.class);
+          var data = result.payload.data;
+          if(data.status == 'success'){
+            toast.success(data.message);
+            setClass(data.data[0].class);
+            setClassId(data.data[0].id);
+            setUpdateClass(true);
+          }else{
+            toast.error(data.message);
+          }
       }).catch((err) => {
           console.log(err);
       });
   }
   
-  const editClass =(values)=>{
+  const editClass =(values,{ setSubmitting })=>{
     const payload = {
       endpoint: SCHOOLS_CLASS_UPDATE,
       values:{
@@ -92,7 +108,16 @@ const Class = () => {
     }
     dispatch(schools(payload))
     .then((result) => {
-          console.log(result);
+        var data = result.payload.data;
+
+        if(data.status == 'success'){
+          setSubmitting(false);
+          toast.success(data.message);
+          getClases();
+        }else{
+          setSubmitting(false);
+          toast.error(data.message);
+        }
       }).catch((err) => {
           console.log(err);
       });
@@ -187,7 +212,11 @@ const Class = () => {
                         <button 
                           type="submit" 
                           className="btn btn-sm bg-gradient-info w-50 mt-4 mb-0"
-                        >Save</button>
+                          disabled={isSubmitting}
+                        >
+                          {isSubmitting ? <div className="spinner-border text-primary" role="status"><span className="visually-hidden">Loading...</span></div> : updateClass ? 'Update' : 'Add New Class'}
+                        </button>
+
                       </div>
                   </form>
               )}

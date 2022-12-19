@@ -49,7 +49,6 @@ const Session = () => {
     
     useEffect(()=>{
         getSession();
-        
     },[])
 
     const getAlumini = ()=>{
@@ -123,8 +122,6 @@ const Session = () => {
         getAlumini();
     }
 
-
-
     const getSingledata = (school_id,year_id,class_id,alum_ref)=>{
         
         !yearList && getYear();
@@ -183,6 +180,7 @@ const Session = () => {
         }
         )
     }
+
   return (
     <>
         <div className="container-fluid py-4">
@@ -486,29 +484,30 @@ const Session = () => {
                             file: null
                         }}
                         onSubmit={(values, { setSubmitting }) => {
-                            const payload = {
-                                endpoint:UPLOAD_REGISTER,
-                                values:{
-                                    token:token,
-                                    file: values.file
-                                }
-                            }
-                            dispatch(schools(payload))
-                            .then((res)=>{
-                                console.log(res);
-                                if(res.payload.data.status == 'success'){
-                                    setSubmitting(false);
+                            console.log(values.file);
+                            // const payload = {
+                            //     endpoint:UPLOAD_REGISTER,
+                            //     values:{
+                            //         token:token,
+                            //         file: values.file
+                            //     }
+                            // }
+                            // dispatch(schools(payload))
+                            // .then((res)=>{
+                            //     console.log(res);
+                            //     if(res.payload.data.status == 'success'){
+                            //         setSubmitting(false);
 
-                                    modalCLose.current.closeModal();
-                                    getSession();
-                                }else{
-                                    setSubmitting(false);
-                                }
+                            //         modalCLose.current.closeModal();
+                            //         getSession();
+                            //     }else{
+                            //         setSubmitting(false);
+                            //     }
 
-                            })
-                            .catch((err)=>{
-                                console.log(err);
-                            })
+                            // })
+                            // .catch((err)=>{
+                            //     console.log(err);
+                            // })
                         }}
 
                     >

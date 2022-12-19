@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { schools } from '../utils/thunkFunc'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { WALLET_DETAILS } from '../utils/constants'
+import { WALLET_DETAILS, WALLET_TRANSACTION } from '../utils/constants'
 
 const Wallet = () => {
   const { isLoggedin, token } = useSelector((state) => state.auth)
@@ -14,6 +14,7 @@ const Wallet = () => {
 
   const [transactions, setTransactions] = useState([]);
   const [balance, setBalance] = useState(0);
+  const [pendingBalance, setPendingBalance] = useState(0);
 
   useEffect(() => {
     getWallet()
@@ -29,7 +30,44 @@ const Wallet = () => {
       }
     dispatch(schools(payload))
     .then((res)=>{
-      console.log(res)
+      const data = res.payload.data;
+      if(data.status == 'success'){
+        toast.success(data.message);
+        setBalance(data.data.available_balance);
+        setPendingBalance(data.data.available_balance);
+        getTransactions();
+      }else{
+        toast.error(data.message);
+      }
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  }
+
+  const getTransactions = ()=>{
+    const payload=
+      {
+        endpoint: WALLET_TRANSACTION,
+        values:{
+            token:token,
+            orderBy: "", 
+            filterFrom: "", 
+            filterTo: "", 
+            status: "", 
+            type: "", 
+            reference_code: ""
+        }
+      }
+    dispatch(schools(payload))
+    .then((res)=>{
+      const data = res.payload.data;
+      if(data.status == 'success'){
+        toast.success(data.message);
+        setTransactions(data.data.transactions);
+      }else{
+        toast.error(data.message);
+      }
     })
     .catch((err)=>{
       console.log(err)
@@ -44,9 +82,20 @@ const Wallet = () => {
                     <div className="card-header mx-4 p-3 text-center"></div>
                     <div className="card-body pt-0 p-3 text-center">
                       <h6 className="text-center mb-0">Balance</h6>
-                      <span className="text-xs">Balance Of Wallet</span>
+                      <span className="text-xs">Available Balance</span>
                       <hr className="horizontal dark my-3"/>
-                      <h5 className="mb-0">+$2000</h5>
+                      <h5 className="mb-0">{balance}</h5>
+                    </div>
+                </div>
+            </div>
+            <div className="col-3">
+                <div className="card mb-4">
+                    <div className="card-header mx-4 p-3 text-center"></div>
+                    <div className="card-body pt-0 p-3 text-center">
+                      <h6 className="text-center mb-0">Balance</h6>
+                      <span className="text-xs">Pending Balance</span>
+                      <hr className="horizontal dark my-3"/>
+                      <h5 className="mb-0">{pendingBalance}</h5>
                     </div>
                 </div>
             </div>

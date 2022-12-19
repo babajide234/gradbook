@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { register, schools } from '../utils/thunkFunc';
 import { SCHOOLS_DETAILS, SCHOOL_REGISTER_ENDPOINT } from '../utils/constants';
 import Modal from '../components/modal';
+import { toast } from 'react-toastify';
 
 const Schools = () => {
     const { token } = useSelector((state)=> state.auth);
@@ -36,12 +37,6 @@ const Schools = () => {
         getSchools();
     },[])
 
-    // useEffect(()=>{
-    //     schools_.map((item)=>{
-    //       console.log(item.name)
-    //     })
-    // },[schools_])
-
     const getSchools = ()=>{
         const payload = {
             endpoint: SCHOOLS_DETAILS,
@@ -51,9 +46,12 @@ const Schools = () => {
         }
         dispatch(schools(payload))
         .then((result) => {
-            if(result.payload.data.data.status == 'success'){
+            const data = result.payload.data;
+            if(data.status == 'success'){
+              toast.success(data.message);
               setSchools(result.payload.data.data);
             }else{
+              toast.error(data.message);
               setSchools([]);
 
             }
@@ -63,6 +61,7 @@ const Schools = () => {
         });
     }
     const getDetail = (id)=>{
+      setDetails([]);
         const payload = {
             endpoint: SCHOOLS_DETAILS,
             values:{
@@ -72,15 +71,42 @@ const Schools = () => {
         }
         dispatch(schools(payload))
         .then((result) => {
-            setDetails(result.payload.data.data)
-            console.log(result);
+            const data = result.payload.data;
+            console.log('====================================');
+            console.log(data.data[0]);
+            console.log('====================================');
+            if(data.status == 'success'){
+              toast.success(data.message);
+              setDetails(data.data[0]);
+            }else{
+              toast.error(data.message);
+              setDetails([]);
+            }
         }).catch((err) => {
             console.log(err);
         });
     }
     const handleEditSubmit = (values)=>{
-        
-        
+      const payload = {
+        endpoint: SCHOOL_REGISTER_ENDPOINT,
+        values:{
+            token:token,
+            ...values
+        }
+      }
+      dispatch(register(payload))
+      .then((result) => {
+          const data = result.payload.data;
+          if(data.status == 'success'){
+            toast.success(data.message);
+            getSchools();
+          }else{
+            toast.error(data.message);
+          }
+          console
+      }).catch((err) => {
+          console.log(err);
+      });
     }
   return (
     <>
@@ -134,10 +160,10 @@ const Schools = () => {
                                   <span className="text-secondary text-xs font-weight-bold">{item.created_on}</span>
                                 </td>
                                 <td className="align-middle">
-                                  {/* <a href="javascript:;" className="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                  {/* <a href="" className="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                     Edit
                                   </a> */}
-                                  <button type="button" className="text-secondary font-weight-bold text-xs btn" data-bs-toggle="modal" data-bs-target="#details" onClick={getDetail(item.school_id)}>
+                                  <button type="button" className="text-secondary font-weight-bold text-xs btn" data-bs-toggle="modal" data-bs-target="#details" onClick={ () =>getDetail(item.school_id)}>
                                     Details
                                   </button>
                                 </td>
@@ -172,44 +198,95 @@ const Schools = () => {
                 <form role="form text-left" onSubmit={handleSubmit}>
                     <label>School Name</label>
                     <div className="input-group mb-3">
-                      <input type="text" name='name' className="form-control" placeholder="School Name" aria-label="Name" aria-describedby="name"/>
+                      <input 
+                      type="text" 
+                      name='name' 
+                      className="form-control" 
+                      placeholder="School Name" 
+                      aria-label="Name" 
+                      aria-describedby="name"/>
                     </div>
                     <label>Email</label>
                     <div className="input-group mb-3">
-                      <input type="email" name='email' className="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon"/>
+                      <input 
+                        type="email" 
+                        name='email' 
+                        className="form-control" 
+                        placeholder="Email" 
+                        aria-label="Email" 
+                        aria-describedby="email-addon"/>
                     </div>
                     <label htmlFor="">Phone Number</label>
                     <div className="input-group mb-3">
-                      <input type="tel" name='phone' placeholder='Phone' className="form-control" />
+                      <input 
+                        type="tel" 
+                        name='phone' 
+                        placeholder='Phone' 
+                        className="form-control" />
                     </div>
                     <label htmlFor="">Headline</label>
                     <div className="input-group mb-5">
-                      <input type="tel" name='headline' placeholder='' className="form-control" />
+                      <input 
+                        type="tel" 
+                        name='headline' 
+                        placeholder='' 
+                        className="form-control" />
                     </div>
                     <div className="input-group mb-3">
-                      <input type="tel" name='whatsapp' placeholder='Whatsapp' className="form-control form-control-sm" />
+                      <input 
+                        type="tel" 
+                        name='whatsapp' 
+                        placeholder='Whatsapp' 
+                        className="form-control form-control-sm" />
                     </div>
                     <div className="input-group mb-3">
-                      <input type="tel" name='facebook' placeholder='Facebook' className="form-control form-control-sm" />
+                      <input 
+                        type="tel" 
+                        name='facebook' 
+                        placeholder='Facebook' 
+                        className="form-control form-control-sm" />
                     </div>
                     <div className="input-group mb-3">
-                      <input type="tel" name='youtube' placeholder='Youtube' className="form-control form-control-sm" />
+                      <input 
+                        type="tel" 
+                        name='youtube' 
+                        placeholder='Youtube' 
+                        className="form-control form-control-sm" />
                     </div>
                     <div className="input-group mb-3">
-                      <input type="tel" name='instagram' placeholder='Instagram' className="form-control form-control-sm" />
+                      <input 
+                        type="tel" 
+                        name='instagram' 
+                        placeholder='Instagram' 
+                        className="form-control form-control-sm" />
                     </div>
                     <div className="form-check form-switch">
-                      <input className="form-check-input" name='active' type="checkbox" id="active" checked=""/>
-                      <label className="form-check-label" for="active">Active</label>
+                      <input 
+                        className="form-check-input" 
+                        name='active' 
+                        type="checkbox" 
+                        id="active" 
+                        checked=""/>
+                      <label className="form-check-label" htmlFor="active">Active</label>
                     </div>                 
                     
                     <label htmlFor="">Anthem</label>
                     <div className="input-group mb-3">
-                      <textarea name="anthem" className=' form-control' id="" cols="30" rows=""></textarea>
+                      <textarea 
+                        name="anthem" 
+                        className=' form-control' 
+                        id="" 
+                        cols="30" 
+                        rows=""></textarea>
                     </div>
                     <label htmlFor="">Address</label>
                     <div className="input-group mb-3">
-                      <textarea name="address" className=' form-control' id="" cols="30" rows=""></textarea>
+                      <textarea 
+                        name="address" 
+                        className=' form-control' 
+                        id="" 
+                        cols="30" 
+                        rows=""></textarea>
                     </div>
                     <div className="text-center">
                       <button type="button" className="btn btn-sm bg-gradient-info w-50 mt-4 mb-0">Save</button>
@@ -219,31 +296,65 @@ const Schools = () => {
             </Formik>
           </Modal>
           <Modal id={'details'} label={'details'}>
+            {
+              details.lenght <= 0 ? (
             
-                    <div className=' mb-4'>
-                      <h3 className="mb-0 text-sm">School Name</h3>
-                      <p className="text-xs text-secondary mb-0">dtails</p>
-                    </div>
-                    <div className=' mb-4'>
-                      <h3 className="mb-0 text-sm">Email</h3>
-                      <p className="text-xs text-secondary mb-0">dtails</p>
-                    </div>
-                    <div className=' mb-4'>
-                      <h3 className="mb-0 text-sm">Phone Number</h3>
-                      <p className="text-xs text-secondary mb-0">dtails</p>
-                    </div>
-                    <div className=' mb-4'>
-                      <h3 className="mb-0 text-sm">Headline</h3>
-                      <p className="text-xs text-secondary mb-0">dtails</p>
-                    </div>
-                    <div className=' mb-4'>
-                      <h3 className="mb-0 text-sm">Anthem</h3>
-                      <p className="text-xs text-secondary mb-0">dtails</p>
-                    </div>
-                    <div className=' mb-4'>
-                      <h3 className="mb-0 text-sm">Address</h3>
-                      <p className="text-xs text-secondary mb-0">dtails</p>
-                    </div>
+                <div className="row">
+                <div className="col-12 text-center">
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+              </div>
+              ):(
+                <div className="row">
+                        <div className=' mb-4'>
+                          <h3 className="mb-0 text-sm">School Name</h3>
+                          <p className="text-xs text-secondary mb-0">
+                            { details.name ? details.name : 'No Name' }
+                          </p>
+                        </div>
+                        <div className=' mb-4'>
+                          <h3 className="mb-0 text-sm">Email</h3>
+                          <p className="text-xs text-secondary mb-0">
+                            { details?.email ? details?.email : 'No Email' }
+                          </p>
+                        </div>
+                        <div className=' mb-4'>
+                          <h3 className="mb-0 text-sm">Phone Number</h3>
+                          <p className="text-xs text-secondary mb-0">
+                            { details?.phone ? details?.phone : 'No Phone Number' }
+                          </p>
+                        </div>
+                        <div className=' mb-4'>
+                          <h3 className="mb-0 text-sm">Headline</h3>
+                          <p className="text-xs text-secondary mb-0"> 
+                            { details?.headline ? details?.headline : 'No Headline' }
+                          </p>
+                        </div>
+                        <div className=' mb-4'>
+                          <h3 className="mb-0 text-sm">Address</h3>
+                          <p className="text-xs text-secondary mb-0">
+                            { details?.address ? details?.address : 'No Address' }
+                          </p>
+                        </div>
+                        <div className=' mb-4'>
+                          <h3 className="mb-0 text-sm">Subscription</h3>
+                          <p className="text-xs text-secondary mb-0">
+                          <span className={`badge badge-sm ${details?.subscription_on == 'Yes' ? 'bg-gradient-success':'bg-gradient-danger'}`}>
+                            { details?.subscription_on ? 'Active' : 'Inactive' }
+                          </span>
+                          </p>
+                        </div>
+                        <div className=' mb-4'>
+                          <h3 className="mb-0 text-sm">Subscription Expire data</h3>
+                          <p className="text-xs text-secondary mb-0">
+                            { details?.subscription_expire ? details?.subscription_expire : 'No Subscription' }
+                          </p>
+                        </div>
+                </div>
+              )
+            } 
           </Modal>
         </div>
     </>

@@ -126,12 +126,7 @@ export const SchoolMenu = [
 ];
 
 export const AluminiMenu = [
-    {
-        path:'/dashboard',
-        name:'Dashboard',
-        icon:"ni ni-tv-2 text-primary text-sm opacity-10",
-        children:[]
-    },
+
     {
         path:'/jobs',
         name:'Jobs',
@@ -171,12 +166,12 @@ export const PROVIDER_LOGIN_ENDPOINT = '/provider/member/login';
 export const PROVIDER_DETAILS = '/provider/member/details';
 export const PROVIDER_UPDATE_DETAILS = '/provider/member/update-details';
 export const PROVIDER_METRICS = '/provider/metrics';
+export const PROVIDER_RESET_PASSWORD = '/provider/member/reset-password';
 
-
-export const SCHOOLS_DETAILS= '/school/details';
-
-export const SCHOOLS_CLASS_LIST= '/school/class/list';
 export const SCHOOLS_CLASS_ADD= '/school/class/add';
+export const SCHOOLS_UPDATE_DETAILS= '/school/member/update-details';
+export const SCHOOLS_DETAILS= '/school/details';
+export const SCHOOLS_CLASS_LIST= '/school/class/list';
 export const SCHOOLS_CLASS_UPDATE= '/school/class/update';
 
 export const SCHOOLS_YEAR_LIST= '/school/year/list';
@@ -192,7 +187,8 @@ export const SCHOOL_SESSION_DETAILS= '/alumni/session/details';
 export const SCHOOL_SESSION_UPDATE= '/alumni/session/update-details';
 export const UPLOAD_REGISTER = '/alumni/session/max-register'
 export const SCHOOL_SESSION_DELETE = '/alumni/session/remove'
-
+export const SCHOOL_METRICS = '/school/metrics';
+export const ALUMINI_METRICS = '/school/metrics';
 
 export const SUBSCRIPTION_DETAILS_ENDPOINT= '/subscription/details';
 export const SUBSCRIPTION_ADD_ENDPOINT  = '/subscription/add';

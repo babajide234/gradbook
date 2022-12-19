@@ -4,6 +4,7 @@ import Modal from '../components/modal';
 import { useDispatch, useSelector } from 'react-redux'
 import { register, schools } from '../utils/thunkFunc';
 import { SCHOOLS_YEAR_ADD, SCHOOLS_YEAR_LIST, SCHOOLS_YEAR_UPDATE } from '../utils/constants';
+import { toast } from 'react-toastify';
 
 const Year = () => {
     const [yearlist, setYearList] = useState([]);
@@ -33,11 +34,14 @@ const Year = () => {
     }
     dispatch(schools(payload))
     .then((result) => {
-      if(result.payload.data.status == 'success'){
+      const data = result.payload.data;
+
+      if(data.status == 'success'){
+        toast.success(data.message);
         setYearList(result.payload.data.data);
       }else{
         setYearList([]);
-
+        toast.error(data.message);
       }
           console.log(result);
       }).catch((err) => {
@@ -46,7 +50,7 @@ const Year = () => {
   }
 
   
-  const addYear =(values)=>{
+  const addYear =(values, {setSubmitting})=>{
     const payload = {
       endpoint: SCHOOLS_YEAR_ADD,
       values:{
@@ -57,7 +61,16 @@ const Year = () => {
     }
     dispatch(schools(payload))
     .then((result) => {
-          console.log(result);
+        const data = result.payload.data;
+        if(data.status == 'success'){
+          toast.success(data.message);
+          setSubmitting(false);
+          getYear();
+        }else{
+          toast.error(data.message);
+          setSubmitting(false);
+        }
+        
       }).catch((err) => {
           console.log(err);
       });
@@ -74,17 +87,21 @@ const Year = () => {
     }
     dispatch(schools(payload))
     .then((result) => {
-          var data = result.payload.data.data[0];
-          setUpdateClass(true)
-          setClass(data.class)
-          setClassId(classId);
-          console.log(result, updateClass, class_ ,data.class);
+          var data = result.payload.data;
+          if(data.status == 'success'){
+            toast.success(data.message);
+            setUpdateClass(true)
+            setClass(data.class)
+            setClassId(classId);
+          }else{
+            toast.error(data.message);
+          }
       }).catch((err) => {
           console.log(err);
       });
   }
-  
-  const editYear =(values)=>{
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+  const editYear =(values,{setSubmitting})=>{
     const payload = {
       endpoint: SCHOOLS_YEAR_UPDATE,
       values:{
@@ -95,7 +112,15 @@ const Year = () => {
     }
     dispatch(schools(payload))
     .then((result) => {
-          console.log(result);
+        const data = result.payload.data;
+        if(data.status == 'success'){
+          toast.success(data.message);
+          setSubmitting(false);
+          getYear();
+        }else{
+          toast.error(data.message);
+          setSubmitting(false);
+        }
       }).catch((err) => {
           console.log(err);
       });
@@ -143,7 +168,7 @@ const Year = () => {
                                   {/* <a href="javascript:;" className="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                     Edit
                                   </a> */}
-                                  <button type="button" className="text-secondary font-weight-bold text-xs btn" data-bs-toggle="modal" data-bs-target="#details" onClick={getSingleYear(item.year_id)}>
+                                  <button type="button" className="text-secondary font-weight-bold text-xs btn" data-bs-toggle="modal" data-bs-target="#details" onClick={() =>getSingleYear(item.year_id)}>
                                     Edit
                                   </button>
                                 </td>
@@ -203,7 +228,11 @@ const Year = () => {
                         ></textarea>
                     </div>
                     <div className="text-center">
-                      <button type="submit" className="btn btn-sm bg-gradient-info w-50 mt-4 mb-0">Save</button>
+                      <button type="submit" className="btn btn-sm bg-gradient-info w-50 mt-4 mb-0" disabled={isSubmitting}>
+                        {isSubmitting ? <div className="spinner-border text-primary" role="status"><span className="visually-hidden">Loading...</span></div> : 'Add New Year'}
+
+                      </button>
+                      
                     </div>
                 </form>
             )}

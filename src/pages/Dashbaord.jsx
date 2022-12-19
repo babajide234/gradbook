@@ -1,123 +1,70 @@
 import React, { useState, useEffect } from 'react'
-import { PROVIDER_METRICS } from '../utils/constants'
+import { ALUMINI_METRICS, PROVIDER_METRICS, SCHOOL_METRICS } from '../utils/constants'
 import { useDispatch, useSelector } from 'react-redux'
-import { metrics as M } from '../utils/thunkFunc';
+import { schools } from '../utils/thunkFunc';
+
+const Metrics = ({met}) => {
+  if(met === null) return null;
+
+  const keys = met !== null && Object.keys(met);
+  console.log(keys);
+  const data = keys.map((key)=>(
+      <div className="col-md-4 mb-4">
+        <div className="card">
+          <div className="card-body">
+            <h5 className="card-title text-capitalize">{key.replace('_'," ")}</h5>
+            <p className="card-text">{met[key]}</p>
+          </div>
+        </div>
+      </div>
+  ))
+  
+  return data;
+}
+
 const Dashbaord = () => {
-  const { token } = useSelector((state)=> state.auth);
+  const { token,user } = useSelector((state)=> state.auth);
   const dispatch = useDispatch();
-  const [metrics, setMetrics] = useState();
+  const [metrics, setMetrics] = useState(null);
+  const [endpoint, setMetricEndpoint] = useState(null);
+
+  useEffect(() => {
+      if(user.role == 'Admin' && !user.school_id && !user.alumni_ref){
+          setMetricEndpoint(PROVIDER_METRICS);
+      }else if(user.school_id && !user.alumni_ref){
+        setMetricEndpoint(SCHOOL_METRICS);
+      }else if( user.school_id && user.alumni_ref){
+        setMetricEndpoint(ALUMINI_METRICS);
+      }
+      // setEndpoint( ALUMINI_DETAILS );
+  }, []);
+
   useEffect(()=>{
+    // if(user === null) return;
+    endpoint && getMetrics();
+  },[endpoint])
 
-  },[])
 
+  
   const getMetrics = ()=>{
-    dispatch(M({token:token}))
+
+    const payload = {
+      endpoint:endpoint,
+      values:{
+          token:token,
+      }
+    }
+    dispatch(schools(payload))
     .then((res)=>{
-      setMetrics(res.payload.data.data)
+      var data = res.payload.data.data;
+      console.log(data);
+      setMetrics(data)
     })
   }
   return (
     <>
       <div className="row">
-      <div className="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-          <div className="card">
-            <div className="card-body p-3">
-              <div className="row">
-                <div className="col-8">
-                  <div className="numbers">
-                    <p className="text-sm mb-0 text-uppercase font-weight-bold">Today's Money</p>
-                    <h5 className="font-weight-bolder">
-                      $53,000
-                    </h5>
-                    <p className="mb-0">
-                      <span className="text-success text-sm font-weight-bolder">+55%</span>
-                      since yesterday
-                    </p>
-                  </div>
-                </div>
-                <div className="col-4 text-end">
-                  <div className="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
-                    <i className="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-          <div className="card">
-            <div className="card-body p-3">
-              <div className="row">
-                <div className="col-8">
-                  <div className="numbers">
-                    <p className="text-sm mb-0 text-uppercase font-weight-bold">Today's Users</p>
-                    <h5 className="font-weight-bolder">
-                      2,300
-                    </h5>
-                    <p className="mb-0">
-                      <span className="text-success text-sm font-weight-bolder">+3%</span>
-                      since last week
-                    </p>
-                  </div>
-                </div>
-                <div className="col-4 text-end">
-                  <div className="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
-                    <i className="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-          <div className="card">
-            <div className="card-body p-3">
-              <div className="row">
-                <div className="col-8">
-                  <div className="numbers">
-                    <p className="text-sm mb-0 text-uppercase font-weight-bold">New Clients</p>
-                    <h5 className="font-weight-bolder">
-                      +3,462
-                    </h5>
-                    <p className="mb-0">
-                      <span className="text-danger text-sm font-weight-bolder">-2%</span>
-                      since last quarter
-                    </p>
-                  </div>
-                </div>
-                <div className="col-4 text-end">
-                  <div className="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
-                    <i className="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="col-xl-3 col-sm-6">
-          <div className="card">
-            <div className="card-body p-3">
-              <div className="row">
-                <div className="col-8">
-                  <div className="numbers">
-                    <p className="text-sm mb-0 text-uppercase font-weight-bold">Sales</p>
-                    <h5 className="font-weight-bolder">
-                      $103,430
-                    </h5>
-                    <p className="mb-0">
-                      <span className="text-success text-sm font-weight-bolder">+5%</span> than last month
-                    </p>
-                  </div>
-                </div>
-                <div className="col-4 text-end">
-                  <div className="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
-                    <i className="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Metrics met={metrics}/>
       </div>
     </>
   )

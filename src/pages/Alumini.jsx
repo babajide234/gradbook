@@ -53,11 +53,13 @@ const Alumini = () => {
           }
           dispatch(schools(payload))
           .then((result) => {
-    
-            if(result.payload.data.status == 'success'){
-              setAluminiList(result.payload.data.data );
+            const data = result.payload.data;
+            if(data.status == 'success'){
+              toast.success(data.message);
+              setAluminiList(data.data );
             }else{
               setAluminiList([]);
+              toast.error(data.message);
             }
                 console.log(result);
             }).catch((err) => {
@@ -68,7 +70,9 @@ const Alumini = () => {
     function handleCloseModal(){
       document.getElementById("new").classList.remove("show", "d-block", "modal-open");  
       document.getElementsByClassName("modal-backdrop")[0].classList.remove("modal-backdrop");
-  }
+
+    }
+
     const addAlumini =(values)=>{
       setIsLoading(true);
       const payload = {
@@ -112,10 +116,14 @@ const Alumini = () => {
       }
       dispatch(schools(payload))
       .then((result) => {
-            var data = result.payload.data.data[0];
-            setClass(data.class)
-            setClassId(classId);
-            console.log(result, updateClass, class_ ,data.class);
+            var data = result.payload.data;
+            if(data.status == 'success'){
+              toast.success(data.message);
+              setClass(data.class)
+              setClassId(classId);
+            }else{
+              toast.error(data.message);
+            }
         }).catch((err) => {
             console.log(err);
         });
