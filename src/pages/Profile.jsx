@@ -236,10 +236,151 @@ const Profile = () => {
                                     </Formik>
                                 )}
                                 { accType == 'Alumni' && (
-                                    <Formik initialValues={initialValues} enableReinitialize={true} onSubmit={handleSubmit}>
+                                    <Formik initialValues={
+                                        {
+                                            alumni_ref : "",
+                                            country : "",
+                                            email : "",
+                                            facebook : "",
+                                            firstname : "",
+                                            headline : "",
+                                            instagram : "",
+                                            lastname : "",
+                                            phone : "",
+                                            school_id : "",
+                                            twitter : "",
+                                            whatsapp : "",
+                                            youtube : "",
+                                        }
+                                    } enableReinitialize={true} onSubmit={handleSubmit}>
                                         {({ values, handleChange, handleSubmit, isSubmitting }) => (
                                                 <form onSubmit={handleSubmit}>
-                                                </form>
+                                               
+                                                <div className="row">
+                                                    <div className="col-md-12">
+                                                        <div className="form-group">
+                                                            <label htmlFor="example-text-input" className="form-control-label">School Name</label>
+                                                            <input
+                                                                className="form-control"
+                                                                type="text"
+                                                                name='name'
+                                                                value={values.name}
+                                                                onChange={handleChange}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    <div className="col-md-12">
+                                                        <div className="form-group">
+                                                            <label htmlFor="example-text-input" className="form-control-label">School Headline</label>
+                                                            <input
+                                                                className="form-control"
+
+                                                                type="text"
+                                                                name='headline'
+                                                                value={values.headline}
+                                                                onChange={handleChange}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    <div className="col-md-6">
+                                                        <div className="form-group">
+                                                            <label htmlFor="example-text-input" className="form-control-label">Email Address</label>
+                                                            <input
+                                                                className="form-control"
+                                                                type="text"
+                                                                name='email'
+                                                                value={values.email}
+                                                                onChange={handleChange}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-md-6">
+                                                        <div className="form-group">
+                                                            <label htmlFor="example-text-input" className="form-control-label">phone</label>
+                                                            <input
+                                                                className="form-control"
+                                                                type="phone"
+                                                                name='phone'
+                                                                value={values.phone}
+                                                                onChange={handleChange}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    <div className="col-md-6">
+                                                        <div className="form-group">
+                                                            <label htmlFor="example-text-input" className="form-control-label">Facebook</label>
+                                                            <input
+                                                                className="form-control"
+                                                                type="text"
+                                                                name='facebook'
+                                                                value={values.facebook}
+                                                                onChange={handleChange}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-md-6">
+                                                        <div className="form-group">
+                                                            <label htmlFor="example-text-input" className="form-control-label">Twitter</label>
+                                                            <input
+
+                                                                className="form-control"
+                                                                type="text"
+                                                                name='twitter'
+                                                                value={values.twitter}
+                                                                onChange={handleChange}
+                                                                
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    <div className="col-md-6">
+                                                        <div className="form-group">
+                                                            <label htmlFor="example-text-input" className="form-control-label">Instagram</label>
+                                                            <input
+                                                                className="form-control"
+                                                                type="text"
+                                                                name='instagram'
+                                                                value={values.instagram}
+                                                                onChange={handleChange}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-md-6">
+                                                        <div className="form-group">
+                                                            <label htmlFor="example-text-input" className="form-control-label">Youtube</label>
+                                                            <input
+                                                                className="form-control"
+                                                                type="text"
+                                                                name='youtube'
+                                                                value={values.youtube}
+                                                                onChange={handleChange}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    <div className="col-md-12">
+                                                        <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+                                                            {
+                                                                isSubmitting ? (
+                                                                    <div className="spinner-border text-light" role="status">
+                                                                        <span className="visually-hidden">Loading...</span>
+                                                                    </div>
+                                                                ) : (
+                                                                    'Submit'
+                                                                )
+                                                            }
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         )}
                                     </Formik>
                                 )}

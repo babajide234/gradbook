@@ -32,9 +32,13 @@ const Jobs = () => {
     }
     dispatch(schools(payload))
     .then((res)=>{
-      
-      setJobs(res.payload.data.data);
-      console.log(res);
+        const data = res.payload.data;
+        if(data.status == 'success'){
+            toast.success(data.message);
+            setJobs(data.data);
+        }else{
+            toast.error(data.message);
+        }
     })
     .catch((err)=>{
       console.log(err);
@@ -42,7 +46,25 @@ const Jobs = () => {
 
   }
   const addNewJob = ()=>{
-
+    const payload = {
+      endpoint: JOB_ADD,
+      values:{
+          token:token,
+      }
+    }
+    dispatch(schools(payload))
+    .then((res)=>{
+        const data = res.payload.data;
+        if(data.status == 'success'){
+            toast.success(data.message);
+            getJobs();
+        }else{
+            toast.error(data.message);
+        }
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
   }
   return (
     <>
@@ -53,7 +75,7 @@ const Jobs = () => {
                 <div className="card-header pb-0">
                     <h6>Jobs</h6>
                     <div className="">
-                        <button className="btn btn-sm bg-gradient-info mx-3 " data-bs-toggle="modal" data-bs-target="#new" onClick={ () => addNewJob() }>Add New Jobs</button>
+                        <button className="btn btn-sm bg-gradient-info mx-3 " data-bs-toggle="modal" data-bs-target="#new" >Add New Jobs</button>
                         {/* <button className="btn btn-sm bg-gradient-info" data-bs-toggle="modal" data-bs-target="#upload" >Upload CSV</button> */}
                     </div>
                 </div>
@@ -130,7 +152,9 @@ const Jobs = () => {
                             dispatch(schools(payload))
                             .then((res)=>{
                                 console.log(res);
-                                if(res.payload.data.status == 'success'){
+                                const data = res.payload.data;
+                                if(data.status == 'success'){
+                                    toast.success(data.message);
                                     setSubmitting(false);
                                     modalCLose.current.closeModal();
                                     getJobs();
@@ -138,9 +162,7 @@ const Jobs = () => {
                                     setSubmitting(false);
                                 }
                                 
-                            }
-                            )
-                            .catch((err)=>{
+                            }).catch((err)=>{
                                 console.log(err);
                             }
                             )

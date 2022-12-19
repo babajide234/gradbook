@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { schools } from '../utils/thunkFunc';
 
 const Metrics = ({met}) => {
-  if(met === null) return null;
+  if(met === null){ return null};
 
   const keys = met !== null && Object.keys(met);
   console.log(keys);
@@ -41,7 +41,7 @@ const Dashbaord = () => {
 
   useEffect(()=>{
     // if(user === null) return;
-    endpoint && getMetrics();
+    endpoint  && getMetrics();
   },[endpoint])
 
 
@@ -56,9 +56,15 @@ const Dashbaord = () => {
     }
     dispatch(schools(payload))
     .then((res)=>{
-      var data = res.payload.data.data;
-      console.log(data);
-      setMetrics(data)
+      var data = res.payload.data;
+      if( data.success == 'success'){
+        data = data.data;
+        setMetrics(data)
+      }else{
+        data = null;
+        setMetrics(data)
+      }
+
     })
   }
   return (

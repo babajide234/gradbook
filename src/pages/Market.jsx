@@ -4,7 +4,7 @@ import { schools } from '../utils/thunkFunc';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from '../components/modal';
 import { Formik } from 'formik';
-
+import { toast } from 'react-toastify';
 const Market = () => {
   const [markets, setMarkets] = useState(null);
   const { token } = useSelector((state)=> state.auth);
@@ -23,7 +23,13 @@ const Market = () => {
       }
       dispatch(schools(payload))
       .then((result) => {
-          setMarkets(result.payload.data.data);
+            const data = result.payload.data;
+            if(data.status == 'success'){
+                toast.success(data.message);
+                setMarkets(data.data);
+            }else{
+                toast.error(data.message);
+            }
       })
       .catch((err)=>{
         console.log(err);
