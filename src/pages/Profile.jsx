@@ -133,11 +133,11 @@ const Profile = () => {
                         </div>
                         <div className="col-auto my-auto">
                             <div className="h-100">
-                            <h5 className="mb-1">
-                                { userdetails.firstname} { userdetails.lastname}
+                            <h5 className="mb-1 text-capitalize">
+                                { userdetails.school_id ?  userdetails.name : userdetails.firstname + userdetails.lastname}
                             </h5>
-                            <p className="mb-0 font-weight-bold text-sm">
-                                { userdetails.alumni_ref ? userdetails.alumni_ref : userdetails.school_id }
+                            <p className="mb-0 font-weight-bold text-sm text-capitalize">
+                                { userdetails.alumni_ref ? userdetails.alumni_ref : userdetails.school_id ? userdetails.headline : userdetails.headline }
                             </p>
                             </div>
                         </div>
@@ -276,7 +276,6 @@ const Profile = () => {
                                                             <label htmlFor="example-text-input" className="form-control-label">School Headline</label>
                                                             <input
                                                                 className="form-control"
-
                                                                 type="text"
                                                                 name='headline'
                                                                 value={values.headline}

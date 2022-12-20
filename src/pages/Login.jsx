@@ -53,7 +53,7 @@ const Login = () => {
    // const params
    const initialValues = {
     email: user ? user : '', 
-    password: '348212' 
+    password: '475128' 
   }
 
   const handleSubmit =  (values, action) =>{

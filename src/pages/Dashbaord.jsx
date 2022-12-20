@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { ALUMINI_METRICS, PROVIDER_METRICS, SCHOOL_METRICS } from '../utils/constants'
 import { useDispatch, useSelector } from 'react-redux'
 import { schools } from '../utils/thunkFunc';
+import { toast } from 'react-toastify';
 
 const Metrics = ({met}) => {
-  if(met === null){ return null};
 
-  const keys = met !== null && Object.keys(met);
-  console.log(keys);
+  console.log('metrics', met);
+  if(met === null) return null;
+  const keys = Object.keys(met);
+  
   const data = keys.map((key)=>(
       <div className="col-md-4 mb-4">
         <div className="card">
@@ -40,7 +42,6 @@ const Dashbaord = () => {
   }, []);
 
   useEffect(()=>{
-    // if(user === null) return;
     endpoint  && getMetrics();
   },[endpoint])
 
@@ -57,20 +58,30 @@ const Dashbaord = () => {
     dispatch(schools(payload))
     .then((res)=>{
       var data = res.payload.data;
-      if( data.success == 'success'){
-        data = data.data;
-        setMetrics(data)
-      }else{
-        data = null;
-        setMetrics(data)
-      }
 
+      if( data.status == 'success'){
+        toast.success(data.message);
+        setMetrics(data.data)
+      }else{
+        toast.error(data.message);
+      }
     })
   }
   return (
     <>
       <div className="row">
-        <Metrics met={metrics}/>
+         {
+            metrics && Object.keys(metrics).map((key)=>(
+              <div className="col-md-4 mb-4">
+                <div className="card">
+                  <div className="card-body">
+                    <h5 className="card-title text-capitalize">{ key.replace('_'," ") }</h5>
+                    <p className="card-text">{ metrics[key] == null ? 0 : metrics[key] }</p>
+                  </div>
+                </div>
+              </div>
+            ))
+         }
       </div>
     </>
   )

@@ -271,19 +271,16 @@ const Session = () => {
                             }
                             dispatch(schools(payload))
                             .then((res)=>{
-                                console.log(res);
-                                if(res.payload.data.status == 'success'){
+                                const data = res.payload.data;
+                                if(data.status == 'success'){
                                     setSubmitting(false);
-
                                     modalCLose.current.closeModal();
                                     getSession();
                                 }else{
+                                    modalCLose.current.closeModal();
                                     setSubmitting(false);
                                 }
-                                
-                            }
-                            )
-                            .catch((err)=>{
+                            }).catch((err)=>{
                                 console.log(err);
                             }
                             )
@@ -423,43 +420,58 @@ const Session = () => {
                             /* and other goodies */
                         }) => (
                             <form onSubmit={handleSubmit}>
-                                <div className="mb-3">
-                                    <label className="form-label">Alumini</label>
-                                    <select className="form-control" name="alumni_ref" id="" onChange={handleChange}>
-                                        <option value="">Select Alumni</option>
-                                        {aluminiList.map((item, index) => (
-                                            <option key={index} value={item.alumni_ref}>{item.alumni_ref}: {item.firstname+' '+item.lastname}</option>
-                                        ))}
-                                    </select>
+                                <div class="form-group">
+                                    <label className="form-label">Alumni</label>
+                                    <div class="input-group">
+                                        <select className="form-control" name="alumni_ref" id="" onChange={handleChange}>
+                                            <option value="">Select Alumni</option>
+                                            {aluminiList.map((item, index) => (
+                                                <option value={item.alumni_ref}>{item.alumni_ref}: {item.firstname+' '+item.lastname}</option>
+                                            ))}
+                                        </select>
+                                        <span class="input-group-text" id="basic-addon1">
+                                            {
+                                                aluminiList ? <span className='ni ni-check-bold text-success'></span>  : <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                            }
+                                        </span>
+                                    </div>
                                 </div>
-                                <div className="mb-3">
-                                    <label className="form-label">Year</label>
+                                <div class="form-group">
+                                <label className="form-label">Year</label>
+                                    <div class="input-group">
                                     <select className="form-control" name="school_year_id" id="" onChange={handleChange}>
                                         <option value="">Select Year</option>
                                         {yearList.map((item, index) => (
-                                            <option key={index} value={item.year_id}>{item.year}</option>
+                                            <option value={item.year_id}>{item.year}</option>
                                         ))}
                                     </select>
+                                    <span class="input-group-text" id="basic-addon1">
+                                        {
+                                            yearList ? <span className='ni ni-check-bold text-success'></span>  : <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        }
+                                    </span>
                                 </div>
+                                </div>
+
                                 <div class="form-group">
+                                <label className="form-label">Class</label>
                                     <div class="input-group">
-                                            <label className="form-label">Class</label>
-                                            <select 
-                                                name="school_class_id" 
-                                                id=""
-                                                onChange={handleChange} className="form-control"
-                                            >
-                                                <option value="">Select Class </option>
-                                                {classList.map((item, index) => (
-                                                    <option key={index} value={item.class_id}>{item.class}</option>
-                                                ))}
-                                            </select>
-                                            <div class="input-group-append">
-                                                <span class="input-group-text" id="basic-addon2">
-                                                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                </span>
-                                            </div>
-                                    </div>
+                                    <select 
+                                        name="school_class_id" 
+                                        id=""
+                                        onChange={handleChange} className="form-control"
+                                    >
+                                        <option value="">Select Class</option>
+                                        {classList.map((item, index) => (
+                                            <option value={item.class_id}>{item.class}</option>
+                                        ))}
+                                    </select>
+                                    <span class="input-group-text" id="basic-addon1">
+                                        {
+                                            classList ? <span className='ni ni-check-bold text-success'></span>  : <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        }
+                                    </span>
+                                </div>
                                 </div>
                                 <div className="mb-3">
                                     <label className="form-label">Headline</label>
