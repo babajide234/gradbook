@@ -26,7 +26,7 @@ const MainLayout = () => {
         <Sidebar/>
         <main className="main-content position-relative border-radius-lg ">
             <Navbar/>
-            <div className="container-fluid py-4" style={{ minHeight: '100vh' }}>
+            <div className="container-fluid py-4 min-vh-80">
                 <Outlet/>
                 <Mainfooter/>
             </div>
@@ -34,7 +34,7 @@ const MainLayout = () => {
         <ToastContainer autoClose={2000} />
     </>
     )
-    : <Navigate to={'/provider/login'}/>
+    : <Navigate to={'/login'}/>
   )
 }
 

@@ -382,7 +382,9 @@ if (iconSidenav) {
 }
 
 function toggleSidenav() {
+  console.log('toggle sidenav');
   if (body.classList.contains(className)) {
+    console.log('remove class');
     body.classList.remove(className);
     setTimeout(function() {
       sidenav.classList.remove('bg-white');

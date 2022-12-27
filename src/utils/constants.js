@@ -90,37 +90,37 @@ export const SchoolMenu = [
     {
         path:'/year',
         name:'Year',
-        icon:'ni ni-single-02 text-primary text-sm opacity-10',       
+        icon:'ni ni-calendar-grid-58 text-primary text-sm opacity-10',       
         children:[]
     },
     {
         path:'/alum',
         name:'Alumini',
-        icon:'ni ni-single-02 text-primary text-sm opacity-10',       
+        icon:'ni ni-hat-3 text-primary text-sm opacity-10',       
         children:[]
     },
     {
         path:'/session',
         name:'Session',
-        icon:'ni ni-single-02 text-primary text-sm opacity-10',       
+        icon:'ni ni-collection text-primary text-sm opacity-10',       
         children:[]
     },
     {
         path:'/subscription',
         name:'Subscription',
-        Icon:'ni ni-single-02 text-primary text-sm opacity-10',   
+        icon:'ni ni-money-coins text-primary text-sm opacity-10',   
         children:[]    
     },
     {
         path:'/wallet',
         name:'Wallets',
-        icon:'ni ni-single-02 text-primary text-sm opacity-10',       
+        icon:'ni ni-credit-card text-primary text-sm opacity-10',       
         children:[]
     },
     {
         path:'/profile',
         name:'Profile',
-        icon:'ni ni-single-02 text-primary text-sm opacity-10',       
+        icon:'ni ni-settings text-primary text-sm opacity-10',       
         children:[]
     }
 ];
@@ -136,13 +136,13 @@ export const AluminiMenu = [
     {
         path:'/emarket',
         name:'Market',
-        icon:'ni ni-single-02 text-primary text-sm opacity-10',
+        icon:'ni ni-basket text-primary text-sm opacity-10',
         children:[]
     },
     {
         path:'/scholarship',
         name:'Scholarships',
-        icon:'ni ni-single-02 text-primary text-sm opacity-10',
+        icon:'ni ni-paper-diploma text-primary text-sm opacity-10',
         children:[]
     },
     {
@@ -154,7 +154,7 @@ export const AluminiMenu = [
     {
         path:'/profile',
         name:'Profile',
-        icon:'ni ni-single-02 text-primary text-sm opacity-10',
+        icon:'ni ni-settings text-primary text-sm opacity-10',       
         children:[]
     }
 ];

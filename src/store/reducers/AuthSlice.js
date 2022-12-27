@@ -32,6 +32,7 @@ export const authSlice = createSlice({
       state.user = '';
       state.message = '';
       localStorage.removeItem('auth')
+      localStorage.removeItem('playCount')
     }
 
   },

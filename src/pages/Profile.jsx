@@ -642,11 +642,10 @@ const Profile = () => {
                                                         <div className="col-md-12">
                                                             <div className="form-group">
                                                                 <label htmlFor="example-text-input" className="form-control-label">anthem</label>
-                                                                <textarea
+                                                                <input
                                                                     className="form-control"
-                                                                    type="text"
+                                                                    type="file"
                                                                     name='anthem'
-                                                                    value={values.anthem}
                                                                     onChange={handleChange}
                                                                 />
                                                             </div>

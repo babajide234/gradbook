@@ -23,9 +23,15 @@ import Session from "../pages/Session";
 import Jobs from "../pages/Jobs";
 import Scholarship from "../pages/Scholarship";
 import Market from "../pages/Market"
+import LoginChoice from "../pages/LoginChoice";
 
 
 const routes = createBrowserRouter([
+    {
+        path :"/login",
+        errorElement: <ErrorPage />,
+        element: <LoginChoice/>
+    },
     {
         path :"/provider",
         element: < AuthLayout />,

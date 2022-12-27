@@ -32,28 +32,32 @@ const Login = () => {
   useEffect(() => {
     if(location.pathname == "/provider/login"){
       setEndpoint(PROVIDER_LOGIN_ENDPOINT);
-      setUser('babajide234@gmail.com');
+      // setUser('babajide234@gmail.com');
       // console.log("pathname", location.pathname);
       console.log("pathname", endpoint);
     }
     if(location.pathname == "/school/login"){
       setEndpoint(SCHOOL_LOGIN_ENDPOINT );
-      setUser('sewel55217@xegge.com');
+      // setUser('sewel55217@xegge.com');
       // console.log("pathname", location.pathname);
       console.log("pathname", endpoint);  
     }
     if(location.pathname == "/alumini/login"){
       setEndpoint( ALUMNI_LOGIN_ENDPOINT );
-      setUser('bapebex213s@diratu.com')
+      // setUser('bapebex213s@diratu.com')
       // console.log("pathname", location.pathname); 
       console.log("pathname", endpoint);
     }
   }, [location]);
 
-   // const params
-   const initialValues = {
-    email: user ? user : '', 
-    password: '475128' 
+  // const params
+  // const initialValues = {
+  //   email: user ? user : '', 
+  //   password: '475128' 
+  // }
+  const initialValues = {
+    email: '', 
+    password: '' 
   }
 
   const handleSubmit =  (values, action) =>{

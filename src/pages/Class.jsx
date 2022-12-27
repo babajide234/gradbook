@@ -127,54 +127,54 @@ const Class = () => {
   return (
     <>
         <div className="row">
-            <div className="col-3">
+            <div className="col-3 col-sm-12">
 
             </div>
         </div>
         <div className="row">
-            <div className="col-6">
-            <div className="card mb-4">
-              <div className="card-header pb-0">
-                <h6>Class List table</h6>
-                <button className="btn btn-sm bg-gradient-info w-35" data-bs-toggle="modal" data-bs-target="#new" >Add New Class</button>
-              </div>
-              <div className="card-body px-0 pt-0 pb-2">
-                <div className="table-responsive p-0">
-                  {
-                    classlist.length <= 0 ? (
-                      <div className=" w-100 h-25flex justify-content-center align-items-center">
-                        <p className=" text-secondary text-center px-3">No Content</p>
-                      </div>
-                    ) :(
-                      <table className="table align-items-center mb-0">
-                        <thead>
-                          <tr>
-                            <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Class</th>
-                            <th className="text-secondary opacity-7"></th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {
-                            classlist.map( (item) =>(
-                              <tr className="" >
-                                <td className="align-middle px-4">
-                                  <span className="text-secondary text-xs font-weight-bold">{item.class}</span>
-                                </td>
-                                <td className="align-middle">
-                                  <button type="button" className="text-secondary font-weight-bold text-xs btn" data-bs-toggle="modal" data-bs-target="#new" onClick={ ( ) => getSingleClass(item.class_id)}>
-                                    Edit
-                                  </button>
-                                </td>
-                              </tr>
-                            ))
-                          }
-                        </tbody>
-                      </table>
-                    )
-                  }
+            <div className="col-12 col-md-6">
+              <div className="card mb-4">
+                <div className="card-header pb-0">
+                  <h6>Class List table</h6>
+                  <button className="btn btn-sm bg-gradient-info w-35" data-bs-toggle="modal" data-bs-target="#new" >Add New Class</button>
+                </div>
+                <div className="card-body px-0 pt-0 pb-2">
+                  <div className="table-responsive p-0">
+                    {
+                      classlist.length <= 0 ? (
+                        <div className=" w-100 h-25flex justify-content-center align-items-center">
+                          <p className=" text-secondary text-center px-3">No Content</p>
+                        </div>
+                      ) :(
+                        <table className="table align-items-center mb-0">
+                          <thead>
+                            <tr>
+                              <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Class</th>
+                              <th className="text-secondary opacity-7"></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {
+                              classlist.map( (item) =>(
+                                <tr className="" >
+                                  <td className="align-middle px-4">
+                                    <span className="text-secondary text-xs font-weight-bold">{item.class}</span>
+                                  </td>
+                                  <td className="align-middle">
+                                    <button type="button" className="text-secondary font-weight-bold text-xs btn" data-bs-toggle="modal" data-bs-target="#new" onClick={ ( ) => getSingleClass(item.class_id)}>
+                                      Edit
+                                    </button>
+                                  </td>
+                                </tr>
+                              ))
+                            }
+                          </tbody>
+                        </table>
+                      )
+                    }
+                  </div>
                 </div>
               </div>
-            </div>
             </div>
         </div>
         <div className="row">
